@@ -14,9 +14,9 @@ public class UnblockUserSendMsgToRoom {
 
     public Mono<Void> single(String username, String roomId) {
         return this.context.getHttpClient()
-                .delete()
-                .uri(String.format("/chatrooms/%s/mute/%s", roomId, username))
-                .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf))
+                .flatMap(httpClient -> httpClient.delete()
+                        .uri(String.format("/chatrooms/%s/mute/%s", roomId, username))
+                        .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf)))
                 .map(buf -> this.context.getCodec().decode(buf, UnblockUserSendMsgToRoomResponse.class))
                 .handle((rsp, sink) -> {
                     if (!rsp.isSuccess(username)) {

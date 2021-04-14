@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class UserGetResponse {
+public class UserGetResponse {
 
     @JsonProperty("entities")
     private List<UserResource> entities;
@@ -23,7 +23,11 @@ class UserGetResponse {
         this.cursor = cursor;
     }
 
-    public List<EMUser> getEMUsers() {
+    public UserResource getEntities() {
+        return entities.get(0);
+    }
+
+    public List<EMUser> getEMUsers(String username) {
         return this.entities.stream().map(UserResource::toEMUser).collect(Collectors.toList());
     }
 

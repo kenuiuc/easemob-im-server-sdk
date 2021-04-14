@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import java.nio.file.Path;
 
 public class Upload {
-    
+
     private Context context;
 
     public Upload(Context context) {
@@ -17,13 +17,13 @@ public class Upload {
 
     public Mono<EMAttachment> fromLocalFile(Path path, boolean restrictAccess) {
         return this.context.getHttpClient()
-                .headers(headers -> headers.add("restrict-access", restrictAccess))
-                //.headers(headers -> headers.remove("Authorization"))
-                .post()
-                .uri("/chatfiles")
-                .sendForm((req, form) -> form.multipart(true)
-                        .attr("filename", path.getFileName().toString())
-                        .file("file", path.toFile())).responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf))
+                .flatMap(httpClient -> httpClient.headers(headers -> headers.add("restrict-access", restrictAccess))
+                        //.headers(headers -> headers.remove("Authorization"))
+                        .post()
+                        .uri("/chatfiles")
+                        .sendForm((req, form) -> form.multipart(true)
+                                .attr("filename", path.getFileName().toString())
+                                .file("file", path.toFile())).responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf)))
                 .map(buf -> this.context.getCodec().decode(buf, UploadFileResponse.class))
                 .handle((rsp, sink) -> {
                     if (rsp.getFiles().isEmpty()) {

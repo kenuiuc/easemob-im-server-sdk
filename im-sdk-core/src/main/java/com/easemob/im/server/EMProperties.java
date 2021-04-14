@@ -9,8 +9,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 
+/**
+ * Server SDK配置类
+ */
 public class EMProperties {
+    private final String baseUri;
     private final String appkey;
+    private final EMProxy proxy;
     private final String clientId;
     private final String clientSecret;
 
@@ -21,8 +26,16 @@ public class EMProperties {
         return new Builder();
     }
 
+    public String getBaseUri() {
+        return baseUri;
+    }
+
     public String getAppkey() {
         return this.appkey;
+    }
+
+    public EMProxy getProxy() {
+        return this.proxy;
     }
 
     public String getAppkeyUrlEncoded() {
@@ -53,9 +66,10 @@ public class EMProperties {
         return this.serverTimezone;
     }
 
-    private EMProperties(String appkey, String clientId, String clientSecret,
-                         int httpConnectionPoolSize, String serverTimezone) {
+    public EMProperties(String baseUri, String appkey, EMProxy proxy, String clientId, String clientSecret, int httpConnectionPoolSize, String serverTimezone) {
+        this.baseUri = baseUri;
         this.appkey = appkey;
+        this.proxy = proxy;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.httpConnectionPoolSize = httpConnectionPoolSize;
@@ -65,21 +79,37 @@ public class EMProperties {
     @Override
     public String toString() {
         return "EMProperties{" +
-                "appkey='" + appkey + '\'' +
-                ", clientId='" + Sensitive.mask(clientId) + '\'' +
-                ", clientSecret='" + Sensitive.mask(clientSecret) + '\'' +
+                "baseUri='" + baseUri + '\'' +
+                ", appkey='" + appkey + '\'' +
+                ", proxy=" + proxy +
+                ", clientId='" + clientId + '\'' +
+                ", clientSecret='" + clientSecret + '\'' +
                 ", httpConnectionPoolSize=" + httpConnectionPoolSize +
-                ", serverTimezone=" + serverTimezone +
+                ", serverTimezone='" + serverTimezone + '\'' +
                 '}';
     }
 
     public static class Builder {
+        private String baseUri;
         private String appkey;
+        private EMProxy proxy;
         private String clientId;
         private String clientSecret;
         private Path downloadDir;
         private int httpConnectionPoolSize = 10;
         private String serverTimezone = "+8";
+
+        /**
+         * 设置rest服务域名。
+         * 该信息为可选，可以不进行设置，Server SDK会自动根据appkey请求到对应的rest服务的baseUri。
+         *
+         * @param baseUri baseUri
+         * @return {@code Builder}
+         */
+        public Builder setBaseUri(String baseUri) {
+            this.baseUri = baseUri;
+            return this;
+        }
 
         /**
          * 设置Appkey，可以到环信Console查询该值。
@@ -105,6 +135,16 @@ public class EMProperties {
             }
 
             this.appkey = appkey;
+            return this;
+        }
+
+        /**
+         * 设置代理
+         * @param proxy proxy
+         * @return {@code Builder}
+         */
+        public Builder setProxy(EMProxy proxy) {
+            this.proxy = proxy;
             return this;
         }
 
@@ -169,14 +209,16 @@ public class EMProperties {
                 throw new EMInvalidStateException("clientSecret not set");
             }
 
-            return new EMProperties(this.appkey, this.clientId, this.clientSecret,
+            return new EMProperties(this.baseUri, this.appkey, this.proxy, this.clientId, this.clientSecret,
                     this.httpConnectionPoolSize, this.serverTimezone);
         }
 
         @Override
         public String toString() {
             return "Builder{" +
-                    "appkey='" + appkey + '\'' +
+                    "baseUri='" + baseUri + '\'' +
+                    ", appkey='" + appkey + '\'' +
+                    ", proxy=" + proxy +
                     ", clientId='" + Sensitive.mask(clientId) + '\'' +
                     ", clientSecret='" + Sensitive.mask(clientSecret) + '\'' +
                     ", downloadDir=" + downloadDir +

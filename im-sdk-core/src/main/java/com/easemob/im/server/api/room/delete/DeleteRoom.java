@@ -14,9 +14,9 @@ public class DeleteRoom {
 
     public Mono<Void> byId(String roomId) {
         return this.context.getHttpClient()
-                .delete()
-                .uri(String.format("/chatrooms/%s", roomId))
-                .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf))
+                .flatMap(httpClient -> httpClient.delete()
+                        .uri(String.format("/chatrooms/%s", roomId))
+                        .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf)))
                 .map(buf -> this.context.getCodec().decode(buf, DeleteRoomResponse.class))
                 .handle((rsp, sink) -> {
                     if (!rsp.getSuccess()) {

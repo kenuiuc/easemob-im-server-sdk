@@ -11,6 +11,8 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @Component
 @Command(name = "update", description = "Update a resource.", mixinStandardHelpOptions = true)
 public class UpdateCmd {
@@ -110,4 +112,15 @@ public class UpdateCmd {
                 .onErrorResume(EMException.class, ignore -> Mono.empty())
                 .block();
     }
+
+    @Command(name = "metadata", description = "Update user metadata.", mixinStandardHelpOptions = true)
+    public void metadata(@Parameters(description = "the username") String username,
+                     @Option(names = "--data", description = "set user metadata") Map<String, String> dataMap) {
+        this.service.metadata().setMetadataToUser(username, dataMap)
+                .doOnSuccess(ignored -> System.out.println("done"))
+                .doOnError(err -> System.out.println("error: " + err.getMessage()))
+                .onErrorResume(EMException.class, ignore -> Mono.empty())
+                .block();
+    }
+
 }

@@ -14,9 +14,9 @@ public class GetGroup {
 
     public Mono<EMGroup> execute(String groupId) {
         return this.context.getHttpClient()
-                .get()
-                .uri(String.format("/chatgroups/%s", groupId))
-                .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf))
+                .flatMap(httpClient -> httpClient.get()
+                        .uri(String.format("/chatgroups/%s", groupId))
+                        .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf)))
                 .map(buf -> this.context.getCodec().decode(buf, GetGroupResponse.class))
                 .map(rsp -> {
                     EMGroup detail = rsp.toGroupDetail(groupId);

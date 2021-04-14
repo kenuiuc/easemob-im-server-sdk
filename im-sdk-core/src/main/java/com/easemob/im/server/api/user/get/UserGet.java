@@ -15,9 +15,9 @@ public class UserGet {
 
     public Mono<EMUser> single(String username) {
         return this.context.getHttpClient()
-                .get()
-                .uri(String.format("/users/%s", username))
-                .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf))
+                .flatMap(httpClient -> httpClient.get()
+                        .uri(String.format("/users/%s", username))
+                        .responseSingle((rsp, buf) -> this.context.getErrorMapper().apply(rsp).then(buf)))
                 .map(buf -> this.context.getCodec().decode(buf, UserGetResponse.class))
                 .handle((rsp, sink) -> {
                     EMUser user = rsp.getEMUser(username);
