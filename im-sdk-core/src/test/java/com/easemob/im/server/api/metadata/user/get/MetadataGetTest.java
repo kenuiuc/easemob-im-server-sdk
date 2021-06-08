@@ -18,7 +18,7 @@ class MetadataGetTest extends AbstractApiTest {
 
     @Test
     public void testMetadataGet() {
-        assertDoesNotThrow(() -> this.metadataGet.getUser("bob").block(Duration.ofSeconds(3)));
+        assertDoesNotThrow(() -> this.metadataGet.fromUser("bob").block(Duration.ofSeconds(3)));
     }
 
     public JsonNode handleMetadataGet(JsonNode req) {

@@ -11,7 +11,7 @@ public class MetadataGet {
         this.context = context;
     }
 
-    public Mono<EMMetadata> getUser(String username) {
+    public Mono<EMMetadata> fromUser(String username) {
         return this.context.getHttpClient()
                 .flatMap(httpClient -> httpClient.get()
                         .uri(String.format("/metadata/user/%s", username))

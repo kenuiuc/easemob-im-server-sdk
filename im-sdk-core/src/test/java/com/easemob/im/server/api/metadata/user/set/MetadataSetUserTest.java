@@ -21,7 +21,7 @@ class MetadataSetUserTest extends AbstractApiTest {
     @Test
     public void testMetadataSet() {
         Map<String, String> map = new HashMap<>();
-        assertDoesNotThrow(() -> this.metadataSetUser.setUser("bob", map).block(Duration.ofSeconds(3)));
+        assertDoesNotThrow(() -> this.metadataSetUser.toUser("bob", map).block(Duration.ofSeconds(3)));
     }
 
     public JsonNode handleMetadataSet(JsonNode req) {

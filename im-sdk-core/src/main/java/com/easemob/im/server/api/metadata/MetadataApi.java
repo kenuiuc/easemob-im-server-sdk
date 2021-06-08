@@ -2,7 +2,7 @@ package com.easemob.im.server.api.metadata;
 
 import com.easemob.im.server.api.Context;
 import com.easemob.im.server.api.metadata.user.capacity.MetadataCapacity;
-import com.easemob.im.server.api.metadata.user.delete.MetadataDeleteUser;
+import com.easemob.im.server.api.metadata.user.delete.MetadataDelete;
 import com.easemob.im.server.api.metadata.user.get.MetadataGet;
 import com.easemob.im.server.api.metadata.user.set.MetadataSet;
 import com.easemob.im.server.model.EMMetadata;
@@ -21,13 +21,13 @@ public class MetadataApi {
 
     private MetadataCapacity metadataCapacity;
 
-    private MetadataDeleteUser metadataDeleteUser;
+    private MetadataDelete metadataDelete;
 
     public MetadataApi(Context context) {
         this.metadataSet = new MetadataSet(context);
         this.metadataGet = new MetadataGet(context);
         this.metadataCapacity = new MetadataCapacity(context);
-        this.metadataDeleteUser = new MetadataDeleteUser(context);
+        this.metadataDelete = new MetadataDelete(context);
     }
 
     /**
@@ -38,7 +38,7 @@ public class MetadataApi {
      * @see <a href="https://docs-im.easemob.com/im/server/ready/usermetadata#%E8%AE%BE%E7%BD%AE%E7%94%A8%E6%88%B7%E5%B1%9E%E6%80%A7">设置用户属性</a>
      */
     public Mono<Void> setMetadataToUser(String username, Map<String, String> metadata) {
-        return this.metadataSet.setUser(username, metadata);
+        return this.metadataSet.toUser(username, metadata);
     }
 
     /**
@@ -48,7 +48,7 @@ public class MetadataApi {
      * @see <a href="https://docs-im.easemob.com/im/server/ready/usermetadata#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%B1%9E%E6%80%A7">获取用户属性</a>
      */
     public Mono<EMMetadata> getMetadataFromUser(String username) {
-        return this.metadataGet.getUser(username);
+        return this.metadataGet.fromUser(username);
     }
 
     /**
@@ -67,7 +67,7 @@ public class MetadataApi {
      * @see <a href="https://docs-im.easemob.com/im/server/ready/usermetadata#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E5%B1%9E%E6%80%A7">删除用户属性</a>
      */
     public Mono<Boolean> deleteMetadataFromUser(String username) {
-        return this.metadataDeleteUser.deleteUser(username);
+        return this.metadataDelete.fromUser(username);
     }
 
 }

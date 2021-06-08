@@ -28,13 +28,10 @@ public class FixedEndpointProvider implements EndpointProvider {
         if (baseUri == null || baseUri.isEmpty()) {
             throw new EMInvalidArgumentException("baseUri must not be null or empty");
         }
-
-        URI uri;
         try {
-            uri = new URI(baseUri);
+            return new URI(baseUri);
         } catch (URISyntaxException e) {
             throw new EMInvalidArgumentException(String.format("baseUri %s is illegal", baseUri));
         }
-        return uri;
     }
 }
