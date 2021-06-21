@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SendSmsRequest {
+    // TODO: Ken I dont care the duplicates because its the backend's job to handle that
     @JsonProperty("mobiles")
     private Set<String> mobiles;
 
