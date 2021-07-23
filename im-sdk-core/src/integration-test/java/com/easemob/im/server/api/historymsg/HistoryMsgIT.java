@@ -1,6 +1,8 @@
 package com.easemob.im.server.api.historymsg;
 
 import com.easemob.im.server.api.AbstractIT;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.FileSystems;
@@ -24,10 +26,10 @@ public class HistoryMsgIT extends AbstractIT {
         this.service.message().getHistoryAsUri(now).block();
     }
 
-    @Test
+    @Disabled
     void testHistoryMsgGetAsLocalFile() {
-        //        Path path = FileSystems.getDefault().getPath("path");
-        //        assertDoesNotThrow(() -> this.service.message().getHistoryAsLocalFile(Instant.ofEpochSecond(1616407200), path, "history.gz").block(Duration.ofSeconds(3)));
+        Path path = FileSystems.getDefault().getPath("path");
+        assertDoesNotThrow(() -> this.service.message().getHistoryAsLocalFile(Instant.ofEpochSecond(1616407200), path, "history.gz").block(Duration.ofSeconds(30)));
     }
 
 }

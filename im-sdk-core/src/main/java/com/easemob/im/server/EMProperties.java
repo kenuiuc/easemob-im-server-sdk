@@ -14,17 +14,50 @@ import java.nio.file.Path;
  * Server SDK配置类
  */
 public class EMProperties {
+
+    // Easemob OR Agora
+    private final Realm realm;
+    // clientId OR appId
+    private final String clientId;
+    // clientSecret OR appCertificate
+    private final String clientSecret;
+    // default token expire elapse = 10 minutes
+    private int expire = 600;
+
     private final String baseUri;
     private final String appkey;
     private final EMProxy proxy;
-    private final String clientId;
-    private final String clientSecret;
-
     private final int httpConnectionPoolSize;
     private final String serverTimezone;
 
+    public enum Realm {
+        AGORA_REALM(1),
+        EASEMOB_REALM(2),
+        ;
+        public short intValue;
+        Realm(int value) {
+            intValue = (short) value;
+        }
+    }
+
+    // preserve this for backwards compatibility
     public EMProperties(String baseUri, String appkey, EMProxy proxy, String clientId,
             String clientSecret, int httpConnectionPoolSize, String serverTimezone) {
+        // easemob realm by default
+        this.realm = Realm.EASEMOB_REALM;
+        this.baseUri = baseUri;
+        this.appkey = appkey;
+        this.proxy = proxy;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.httpConnectionPoolSize = httpConnectionPoolSize;
+        this.serverTimezone = serverTimezone;
+    }
+
+    private EMProperties(Realm realm, int expire, String baseUri, String appkey, EMProxy proxy, String clientId,
+            String clientSecret, int httpConnectionPoolSize, String serverTimezone) {
+        this.realm = realm;
+        this.expire = expire;
         this.baseUri = baseUri;
         this.appkey = appkey;
         this.proxy = proxy;
@@ -35,7 +68,27 @@ public class EMProperties {
     }
 
     public static Builder builder() {
-        return new Builder();
+        return new Builder(Realm.EASEMOB_REALM);
+    }
+
+    public static Builder builder(Realm realm) {
+        return new Builder(realm);
+    }
+
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public String getAppId() {
+        return this.clientId;
+    }
+
+    public String getAppCertificate() {
+        return this.clientSecret;
+    }
+
+    public int getExpire() {
+        return this.expire;
     }
 
     public String getBaseUri() {
@@ -91,7 +144,11 @@ public class EMProperties {
                 '}';
     }
 
+
     public static class Builder {
+        private final Realm realm;
+        private int expire = 600;
+
         private String baseUri;
         private String appkey;
         private EMProxy proxy;
@@ -100,6 +157,16 @@ public class EMProperties {
         private Path downloadDir;
         private int httpConnectionPoolSize = 10;
         private String serverTimezone = "+8";
+
+
+        public Builder(Realm realm) {
+            this.realm = realm;
+        }
+
+        public Builder setExpire(int expire) {
+            this.expire = expire;
+            return this;
+        }
 
         /**
          * 设置rest服务域名。
@@ -149,6 +216,22 @@ public class EMProperties {
          */
         public Builder setProxy(EMProxy proxy) {
             this.proxy = proxy;
+            return this;
+        }
+
+        public Builder setAppId(String appId) {
+            if (Strings.isBlank(appId)) {
+                throw new EMInvalidArgumentException("appId must not be null or blank");
+            }
+            this.clientId = appId;
+            return this;
+        }
+
+        public Builder setAppCertificate(String appCertificate) {
+            if (Strings.isBlank(appCertificate)) {
+                throw new EMInvalidArgumentException("appCertificate must not be null or blank");
+            }
+            this.clientSecret = appCertificate;
             return this;
         }
 
@@ -204,24 +287,30 @@ public class EMProperties {
          * @return {@code EMProperties}
          */
         public EMProperties build() {
+            if (this.realm == null) {
+                throw new EMInvalidStateException("realm not set");
+            }
             if (this.appkey == null) {
                 throw new EMInvalidStateException("appkey not set");
             }
             if (this.clientId == null) {
-                throw new EMInvalidStateException("clientId not set");
+                String msg = realm == Realm.AGORA_REALM ? "appId not set" : "clientId not set";
+                throw new EMInvalidStateException(msg);
             }
             if (this.clientSecret == null) {
-                throw new EMInvalidStateException("clientSecret not set");
+                String msg = realm == Realm.AGORA_REALM ? "appCertificate not set" : "clientSecret not set";
+                throw new EMInvalidStateException(msg);
             }
 
-            return new EMProperties(this.baseUri, this.appkey, this.proxy, this.clientId,
-                    this.clientSecret,
-                    this.httpConnectionPoolSize, this.serverTimezone);
+            return new EMProperties(this.realm, this.expire, this.baseUri, this.appkey, this.proxy, this.clientId,
+                    this.clientSecret, this.httpConnectionPoolSize, this.serverTimezone);
         }
 
         @Override
         public String toString() {
             return "Builder{" +
+                    "realm='" + realm.toString() + '\'' +
+                    "expire='" + expire + '\'' +
                     "baseUri='" + baseUri + '\'' +
                     ", appkey='" + appkey + '\'' +
                     ", proxy=" + proxy +

@@ -1,7 +1,10 @@
 package com.easemob.im.server.api.user;
 
+import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.api.Context;
 import com.easemob.im.server.api.token.Token;
+import com.easemob.im.server.api.token.agora.AccessToken2;
+import com.easemob.im.server.api.token.agora.AccessToken2.PrivilegeChat;
 import com.easemob.im.server.api.user.create.CreateUser;
 import com.easemob.im.server.api.user.forcelogout.ForceLogoutUser;
 import com.easemob.im.server.api.user.get.UserGet;
@@ -9,16 +12,29 @@ import com.easemob.im.server.api.user.list.ListUsers;
 import com.easemob.im.server.api.user.password.UpdateUserPassword;
 import com.easemob.im.server.api.user.status.UserStatus;
 import com.easemob.im.server.api.user.unregister.DeleteUser;
+import com.easemob.im.server.exception.EMForbiddenException;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
+import com.easemob.im.server.exception.EMInvalidStateException;
 import com.easemob.im.server.model.EMPage;
 import com.easemob.im.server.model.EMUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Instant;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 用户API。
  */
 public class UserApi {
+
+    private static final Logger log = LoggerFactory.getLogger(UserApi.class);
 
     private CreateUser createUser;
     private DeleteUser deleteUser;
@@ -116,6 +132,11 @@ public class UserApi {
         return this.userGet.single(username);
     }
 
+    // TODO: Ken get UUID from the user entity
+    public Mono<String> getUUID(String username) {
+        return Mono.empty();
+    }
+
     /**
      * 修改用户密码。
      *
@@ -179,5 +200,58 @@ public class UserApi {
      */
     public Mono<Token> getToken(String username, String password) {
         return this.context.getTokenProvider().fetchUserToken(username, password);
+    }
+
+    public Mono<Token> buildChatToken(String userId, int expireSeconds) {
+        validateAgoraRealm();
+        return this.context.getTokenProvider().buildUserToken(userId, expireSeconds);
+    }
+
+    public Mono<Token> buildCustomizedToken(String userId, int expireSeconds,
+            Consumer<AccessToken2> tokenConfigurer) throws Exception {
+        validateAgoraRealm();
+        String appId = this.context.getProperties().getAppId();
+        String appCertificate = this.context.getProperties().getAppCertificate();
+        AccessToken2 accessToken = new AccessToken2(appId, appCertificate, expireSeconds);
+        AccessToken2.Service serviceChat = new AccessToken2.ServiceChat(userId);
+        serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER, expireSeconds);
+        accessToken.addService(serviceChat);
+
+        tokenConfigurer.accept(accessToken);
+
+        validateAccessToken2(accessToken);
+        final String token2Value = accessToken.build();
+        final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
+        return Mono.just(new Token(token2Value, expireAt));
+    }
+
+    private void validateAgoraRealm() {
+        EMProperties properties = this.context.getProperties();
+        EMProperties.Realm realm = properties.getRealm();
+        if (realm != EMProperties.Realm.AGORA_REALM) {
+            throw new EMInvalidStateException("current realm in use is not Agora Realm");
+        }
+    }
+
+    private void validateAccessToken2(AccessToken2 token) {
+        AccessToken2.Service service = token.getService(AccessToken2.SERVICE_TYPE_CHAT);
+        if (service == null) {
+            return;
+        }
+        AccessToken2.ServiceChat serviceChat = (AccessToken2.ServiceChat) service;
+        String userId = serviceChat.getUserId();
+        Map<Short, Integer> chatPrivileges = serviceChat.getPrivileges();
+        boolean hasUserId = userId != null;
+        boolean hasAppPrivilege = chatPrivileges.get(PrivilegeChat.PRIVILEGE_CHAT_APP.intValue) != null;
+        boolean hasUserPrivilege = chatPrivileges.get(PrivilegeChat.PRIVILEGE_CHAT_USER.intValue) != null;
+        if (hasAppPrivilege && hasUserPrivilege) {
+            throw new EMForbiddenException("accessToken cannot include both chatApp and chatUser privileges at the same time");
+        }
+        if (hasAppPrivilege && hasUserId) {
+            throw new EMForbiddenException("accessToken cannot include both chatApp privilege and userId at the same time");
+        }
+        if (hasUserPrivilege && !hasUserId) {
+            throw new EMForbiddenException("accessToken with a chatUser privilege must include an userId");
+        }
     }
 }
