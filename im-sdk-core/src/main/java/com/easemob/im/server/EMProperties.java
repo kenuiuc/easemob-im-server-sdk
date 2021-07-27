@@ -1,5 +1,6 @@
 package com.easemob.im.server;
 
+import com.easemob.im.server.api.token.agora.Utils;
 import com.easemob.im.server.api.util.Sensitive;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
 import com.easemob.im.server.exception.EMInvalidStateException;
@@ -83,7 +84,7 @@ public class EMProperties {
         return this.clientId;
     }
 
-    public String getAppCertificate() {
+    public String getAppCert() {
         return this.clientSecret;
     }
 
@@ -220,16 +221,16 @@ public class EMProperties {
         }
 
         public Builder setAppId(String appId) {
-            if (Strings.isBlank(appId)) {
-                throw new EMInvalidArgumentException("appId must not be null or blank");
+            if (Strings.isBlank(appId) || !Utils.isUUID(appId)) {
+                throw new EMInvalidArgumentException("appId must be an UUID");
             }
             this.clientId = appId;
             return this;
         }
 
-        public Builder setAppCertificate(String appCert) {
-            if (Strings.isBlank(appCert)) {
-                throw new EMInvalidArgumentException("appCert must not be null or blank");
+        public Builder setAppCert(String appCert) {
+            if (Strings.isBlank(appCert) || !Utils.isUUID(appCert)) {
+                throw new EMInvalidArgumentException("appCert must be an UUID");
             }
             this.clientSecret = appCert;
             return this;

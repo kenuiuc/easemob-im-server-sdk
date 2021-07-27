@@ -8,22 +8,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EMPropertiesTest {
 
-    private static final String APP_KEY = "dummyOrg#dummyApp";
-    private static final String APP_ID = "dummyAppId";
-    private static final String APP_CERTIFICATE = "dummyAppCertificate";
-    private static final int DEFAULT_EXPIRE = 100;
-
+    private static final String DUMMY_APP_KEY = "dummyOrg#dummyApp";
+    private static final String DUMMY_APP_ID = "970CA35de60c44645bbae8a215061b33";
+    private static final String DUMMY_APP_CERT = "5CFd2fd1755d40ecb72977518be15d3b";
 
     @Test
     public void buildEMPropertiesAgoraRealm() {
         EMProperties properties = EMProperties.builder(EMProperties.Realm.AGORA_REALM)
-                .setAppkey(APP_KEY)
-                .setAppId(APP_ID)
-                .setAppCertificate(APP_CERTIFICATE)
+                .setAppkey(DUMMY_APP_KEY)
+                .setAppId(DUMMY_APP_ID)
+                .setAppCert(DUMMY_APP_CERT)
                 .build();
-        assertEquals(APP_KEY, properties.getAppkey());
-        assertEquals(APP_ID, properties.getAppId());
-        assertEquals(APP_CERTIFICATE, properties.getAppCertificate());
+        assertEquals(DUMMY_APP_KEY, properties.getAppkey());
+        assertEquals(DUMMY_APP_ID, properties.getAppId());
+        assertEquals(DUMMY_APP_CERT, properties.getAppCert());
     }
 
     @Test

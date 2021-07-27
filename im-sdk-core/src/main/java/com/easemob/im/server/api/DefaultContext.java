@@ -6,6 +6,7 @@ import com.easemob.im.server.api.loadbalance.*;
 import com.easemob.im.server.api.token.allocate.AgoraTokenProvider;
 import com.easemob.im.server.api.token.allocate.DefaultTokenProvider;
 import com.easemob.im.server.api.token.allocate.TokenProvider;
+import com.easemob.im.server.exception.EMInvalidStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -39,20 +40,23 @@ public class DefaultContext implements Context {
         this.codec = new JsonCodec();
         this.errorMapper = new DefaultErrorMapper();
         this.loadBalancer = new UniformRandomLoadBalancer();
-        EndpointProviderFactory
-                endpointProviderFactory =
+        EndpointProviderFactory endpointProviderFactory =
                 new DefaultEndpointProviderFactory(this.properties, this.codec,
                         httpClient.baseUrl("http://rs.easemob.com"), this.errorMapper);
         this.endpointProvider = endpointProviderFactory.create();
         this.endpointRegistry =
                 new TimedRefreshEndpointRegistry(this.endpointProvider, Duration.ofMinutes(5));
-        if (properties.getRealm() == EMProperties.Realm.AGORA_REALM) {
-            this.tokenProvider = new AgoraTokenProvider(properties.getAppId(), properties.getAppCertificate(), properties.getExpire());
-        } else {
-            // use easemob realm by default
+
+        EMProperties.Realm realm = properties.getRealm();
+        if (realm == EMProperties.Realm.AGORA_REALM) {
+            this.tokenProvider = new AgoraTokenProvider(properties.getAppId(), properties.getAppCert(), properties.getExpire());
+        } else if (realm == EMProperties.Realm.EASEMOB_REALM) {
             this.tokenProvider = new DefaultTokenProvider(properties, httpClient, this.endpointRegistry,
                     this.loadBalancer, this.codec, this.errorMapper);
+        } else {
+            throw new EMInvalidStateException(String.format("Realm value = %d is illegal", realm.intValue));
         }
+
         this.httpClient = httpClient.headersWhen(headers -> this.tokenProvider.fetchAppToken()
                 .map(token -> headers
                         .set("Authorization", String.format("Bearer %s", token.getValue()))));

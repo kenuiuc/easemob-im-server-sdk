@@ -39,7 +39,7 @@ public class RenewAppTokenIT {
               .setBaseUri(BASE_URI)
               .setAppkey(APP_KEY)
               .setAppId(APP_ID)
-              .setAppCertificate(APP_CERTIFICATE)
+              .setAppCert(APP_CERTIFICATE)
               .setHttpConnectionPoolSize(10)
               .setServerTimezone("+8")
               .build();

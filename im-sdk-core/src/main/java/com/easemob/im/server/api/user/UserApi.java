@@ -206,7 +206,7 @@ public class UserApi {
             Consumer<AccessToken2> tokenConfigurer) throws Exception {
         validateAgoraRealm();
         String appId = this.context.getProperties().getAppId();
-        String appCert = this.context.getProperties().getAppCertificate();
+        String appCert = this.context.getProperties().getAppCert();
         String token2Value = AccessToken2Utils
                 .buildCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
 
