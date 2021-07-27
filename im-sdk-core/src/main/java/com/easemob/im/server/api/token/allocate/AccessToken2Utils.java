@@ -14,8 +14,8 @@ public class AccessToken2Utils {
     private static final Logger log = LoggerFactory.getLogger(AccessToken2Utils.class);
     private static final String ERROR_MSG = "failed to build AccessToken2";
 
-    public static String buildAppToken(String appId, String appCertificate, int expire) {
-        AccessToken2 accessToken = new AccessToken2(appId, appCertificate, expire);
+    public static String buildAppToken(String appId, String appCert, int expire) {
+        AccessToken2 accessToken = new AccessToken2(appId, appCert, expire);
         AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
         serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP, expire);
         accessToken.addService(serviceChat);
@@ -27,10 +27,10 @@ public class AccessToken2Utils {
         }
     }
 
-    public static String buildUserChatToken(String appId, String appCertificate,
+    public static String buildUserChatToken(String appId, String appCert,
             String userId, int expire) {
 
-        AccessToken2 accessToken = new AccessToken2(appId, appCertificate, expire);
+        AccessToken2 accessToken = new AccessToken2(appId, appCert, expire);
         AccessToken2.Service serviceChat = new AccessToken2.ServiceChat(userId);
         serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER, expire);
         accessToken.addService(serviceChat);
@@ -43,10 +43,10 @@ public class AccessToken2Utils {
         }
     }
 
-    public static String buildCustomizedToken(String appId, String appCertificate, String userId,
+    public static String buildCustomizedToken(String appId, String appCert, String userId,
             int expire, Consumer<AccessToken2> tokenConfigurer) {
 
-        AccessToken2 accessToken = new AccessToken2(appId, appCertificate, expire);
+        AccessToken2 accessToken = new AccessToken2(appId, appCert, expire);
         AccessToken2.Service serviceChat = new AccessToken2.ServiceChat(userId);
         serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER, expire);
         accessToken.addService(serviceChat);

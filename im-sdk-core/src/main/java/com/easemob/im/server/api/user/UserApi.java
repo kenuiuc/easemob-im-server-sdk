@@ -206,9 +206,9 @@ public class UserApi {
             Consumer<AccessToken2> tokenConfigurer) throws Exception {
         validateAgoraRealm();
         String appId = this.context.getProperties().getAppId();
-        String appCertificate = this.context.getProperties().getAppCertificate();
+        String appCert = this.context.getProperties().getAppCertificate();
         String token2Value = AccessToken2Utils
-                .buildCustomizedToken(appId, appCertificate, userId, expireSeconds, tokenConfigurer);
+                .buildCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
 
         final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
         return Mono.just(new Token(token2Value, expireAt));

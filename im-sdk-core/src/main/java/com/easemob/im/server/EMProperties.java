@@ -19,7 +19,7 @@ public class EMProperties {
     private final Realm realm;
     // clientId OR appId
     private final String clientId;
-    // clientSecret OR appCertificate
+    // clientSecret OR appCert
     private final String clientSecret;
     // default app token expire elapse = 10 minutes but this can be set
     private int expire = 600;
@@ -227,11 +227,11 @@ public class EMProperties {
             return this;
         }
 
-        public Builder setAppCertificate(String appCertificate) {
-            if (Strings.isBlank(appCertificate)) {
-                throw new EMInvalidArgumentException("appCertificate must not be null or blank");
+        public Builder setAppCertificate(String appCert) {
+            if (Strings.isBlank(appCert)) {
+                throw new EMInvalidArgumentException("appCert must not be null or blank");
             }
-            this.clientSecret = appCertificate;
+            this.clientSecret = appCert;
             return this;
         }
 
@@ -298,7 +298,7 @@ public class EMProperties {
                 throw new EMInvalidStateException(msg);
             }
             if (this.clientSecret == null) {
-                String msg = realm == Realm.AGORA_REALM ? "appCertificate not set" : "clientSecret not set";
+                String msg = realm == Realm.AGORA_REALM ? "appCert not set" : "clientSecret not set";
                 throw new EMInvalidStateException(msg);
             }
 
