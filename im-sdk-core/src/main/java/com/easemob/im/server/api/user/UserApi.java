@@ -132,9 +132,8 @@ public class UserApi {
         return this.userGet.single(username);
     }
 
-    // TODO: Ken get UUID from the user entity
     public Mono<String> getUUID(String username) {
-        return Mono.empty();
+        return this.get(username).map(EMUser::getUuid);
     }
 
     /**
