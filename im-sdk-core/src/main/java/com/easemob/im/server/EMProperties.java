@@ -21,7 +21,7 @@ public class EMProperties {
     private final String clientId;
     // clientSecret OR appCertificate
     private final String clientSecret;
-    // default token expire elapse = 10 minutes
+    // default app token expire elapse = 10 minutes but this can be set
     private int expire = 600;
 
     private final String baseUri;
@@ -146,7 +146,7 @@ public class EMProperties {
 
 
     public static class Builder {
-        private final Realm realm;
+        private Realm realm;
         private int expire = 600;
 
         private String baseUri;

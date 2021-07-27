@@ -11,24 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class ChatTokenUserIT {
 
+    private static final String BASE_URI = System.getenv("IM_BASE_URI");
     private static final String APP_KEY = System.getenv("IM_APPKEY");
     private static final String APP_ID = System.getenv("IM_APP_ID");
     private static final String APP_CERTIFICATE = System.getenv("IM_APP_CERTIFICATE");
 
-
     private static final int EXPIRE_SECONDS = 3601;
     private static final String PASSWORD = "password";
-    private static final String USER_NAME = "ken-0";
     private static final String USER_ID = "da9287a0-ecf9-11eb-9af3-296ff79acb67";
-
-    private static final String BASE_URI = "http://hsb-didi-guangzhou-mesos-slave4:31032";
-
 
     private static final Logger log = LoggerFactory.getLogger(ChatTokenUserIT.class);
 
@@ -49,8 +45,7 @@ public class ChatTokenUserIT {
 
     @Test
     public void userCrud() {
-        String randomUsername = String.format("im-sdk-it-ken-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, PASSWORD)
                 .block());
         assertDoesNotThrow(

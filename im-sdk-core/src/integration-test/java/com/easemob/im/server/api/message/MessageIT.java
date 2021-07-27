@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.time.Duration;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class MessageIT extends AbstractIT {
 
@@ -18,12 +18,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendText() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -43,12 +41,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendImage() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -73,12 +69,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendVoice() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -103,12 +97,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendVideo() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -134,12 +126,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendFile() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -162,12 +152,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendLocation() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -187,12 +175,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendCommand() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)
@@ -212,12 +198,10 @@ public class MessageIT extends AbstractIT {
 
     @Test
     void testMessageSendCustom() {
-        String randomFromUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomFromUsername = makeRandomUserName();
         String randomPassword = randomFromUsername;
 
-        String randomToUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomToUsername = makeRandomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomFromUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
         assertDoesNotThrow(() -> this.service.user().create(randomToUsername, randomPassword)

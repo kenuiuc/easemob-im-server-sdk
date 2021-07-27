@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class GroupIT extends AbstractIT {
 
@@ -23,12 +23,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupCreatePublic() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -56,12 +54,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupCreatePrivate() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -88,12 +84,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupDestroy() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -115,12 +109,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListAllGroups() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -142,12 +134,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListGroups() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -169,12 +159,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGet() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -196,12 +184,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdate() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -230,12 +216,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdateOwner() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -264,12 +248,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetAnnouncement() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -291,12 +273,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdateAnnouncement() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -326,12 +306,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListAllGroupMembers() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -353,12 +331,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListMembers() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -391,12 +367,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupAddMember() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
@@ -430,12 +404,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupRemoveMember() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -467,14 +439,11 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupAddAdmin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomAdminUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomAdminUsername = makeRandomUserName();
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         members.add(randomAdminUsername);
@@ -508,14 +477,11 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupRemoveAdmin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomAdminUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomAdminUsername = makeRandomUserName();
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         members.add(randomAdminUsername);
@@ -550,12 +516,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetUsersBlockedJoin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -586,12 +550,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupBlockUserJoin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -644,12 +606,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUnblockUserJoin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -696,12 +656,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetUsersBlockedSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -738,12 +696,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupBlockUserSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -780,12 +736,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUnblockUserSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)

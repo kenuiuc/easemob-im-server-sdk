@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class RoomIT extends AbstractIT {
 
@@ -19,12 +19,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomCreate() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -44,12 +42,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomGet() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -70,12 +66,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUpdate() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -98,12 +92,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomListAll() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -125,12 +117,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomListRooms() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -152,12 +142,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUserJoinedList() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -179,12 +167,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomMembersAll() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -206,12 +192,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomMembers() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -233,12 +217,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomAddMember() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
@@ -259,12 +241,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomRemoveMember() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -286,12 +266,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomAdminsAll() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -315,12 +293,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomPromoteAdmin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -342,12 +318,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDemoteAdmin() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -371,8 +345,7 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomSuperAdminsAll() {
-        String randomUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomUsername = makeRandomUserName();
         String randomPassword = randomUsername;
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
@@ -386,8 +359,7 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomPromoteSuperAdmin() {
-        String randomUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomUsername = makeRandomUserName();
         String randomPassword = randomUsername;
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
@@ -399,8 +371,7 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDemoteSuperAdmin() {
-        String randomUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomUsername = makeRandomUserName();
         String randomPassword = randomUsername;
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Duration.ofSeconds(30)));
@@ -412,12 +383,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDestroy() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -437,12 +406,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUsersBlockedSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -467,12 +434,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomBlockUserSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -507,12 +472,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUnblockUserSendMsg() {
-        String randomOwnerUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomOwnerUsername = makeRandomUserName();
         String randomPassword = randomOwnerUsername;
 
-        String randomMemberUsername = String.format("im-sdk-it-user-%08d",
-                ThreadLocalRandom.current().nextInt(100000000));
+        String randomMemberUsername = makeRandomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)

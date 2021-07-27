@@ -13,13 +13,11 @@ public class AgoraTokenProvider implements TokenProvider {
 
     private final String appId;
     private final String appCertificate;
-    private final int expireSeconds;
     private final Mono<Token> appToken;
 
     public AgoraTokenProvider(String appId, String appCertificate, int expireSeconds) {
         this.appId = appId;
         this.appCertificate = appCertificate;
-        this.expireSeconds = expireSeconds;
         this.appToken = Mono.fromCallable(() -> {
             final String appTokenValue =
                     AccessToken2Utils.buildAppToken(appId, appCertificate, expireSeconds);
