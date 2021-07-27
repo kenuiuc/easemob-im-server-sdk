@@ -5,6 +5,7 @@ import com.easemob.im.server.api.Context;
 import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.api.token.agora.AccessToken2.PrivilegeChat;
+import com.easemob.im.server.api.token.allocate.AccessToken2Utils;
 import com.easemob.im.server.api.user.create.CreateUser;
 import com.easemob.im.server.api.user.forcelogout.ForceLogoutUser;
 import com.easemob.im.server.api.user.get.UserGet;
@@ -201,29 +202,19 @@ public class UserApi {
         return this.context.getTokenProvider().fetchUserToken(username, password);
     }
 
-    public Mono<Token> buildChatToken(String userId, int expireSeconds) {
-        validateAgoraRealm();
-        return this.context.getTokenProvider().buildUserToken(userId, expireSeconds);
-    }
-
     public Mono<Token> buildCustomizedToken(String userId, int expireSeconds,
             Consumer<AccessToken2> tokenConfigurer) throws Exception {
         validateAgoraRealm();
         String appId = this.context.getProperties().getAppId();
         String appCertificate = this.context.getProperties().getAppCertificate();
-        AccessToken2 accessToken = new AccessToken2(appId, appCertificate, expireSeconds);
-        AccessToken2.Service serviceChat = new AccessToken2.ServiceChat(userId);
-        serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER, expireSeconds);
-        accessToken.addService(serviceChat);
+        String token2Value = AccessToken2Utils
+                .buildCustomizedToken(appId, appCertificate, userId, expireSeconds, tokenConfigurer);
 
-        tokenConfigurer.accept(accessToken);
-
-        validateAccessToken2(accessToken);
-        final String token2Value = accessToken.build();
         final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
         return Mono.just(new Token(token2Value, expireAt));
     }
 
+    // TODO: remove this validation
     private void validateAgoraRealm() {
         EMProperties properties = this.context.getProperties();
         EMProperties.Realm realm = properties.getRealm();
@@ -232,25 +223,4 @@ public class UserApi {
         }
     }
 
-    private void validateAccessToken2(AccessToken2 token) {
-        AccessToken2.Service service = token.getService(AccessToken2.SERVICE_TYPE_CHAT);
-        if (service == null) {
-            return;
-        }
-        AccessToken2.ServiceChat serviceChat = (AccessToken2.ServiceChat) service;
-        String userId = serviceChat.getUserId();
-        Map<Short, Integer> chatPrivileges = serviceChat.getPrivileges();
-        boolean hasUserId = userId != null;
-        boolean hasAppPrivilege = chatPrivileges.get(PrivilegeChat.PRIVILEGE_CHAT_APP.intValue) != null;
-        boolean hasUserPrivilege = chatPrivileges.get(PrivilegeChat.PRIVILEGE_CHAT_USER.intValue) != null;
-        if (hasAppPrivilege && hasUserPrivilege) {
-            throw new EMForbiddenException("accessToken cannot include both chatApp and chatUser privileges at the same time");
-        }
-        if (hasAppPrivilege && hasUserId) {
-            throw new EMForbiddenException("accessToken cannot include both chatApp privilege and userId at the same time");
-        }
-        if (hasUserPrivilege && !hasUserId) {
-            throw new EMForbiddenException("accessToken with a chatUser privilege must include an userId");
-        }
-    }
 }

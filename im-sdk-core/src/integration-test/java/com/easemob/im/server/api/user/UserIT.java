@@ -376,8 +376,6 @@ class UserIT extends AbstractIT {
         EMProperties.Realm realm = this.service.getContext().getProperties().getRealm();
         if (realm == EMProperties.Realm.AGORA_REALM) {
             assertDoesNotThrow(
-                    () -> this.service.user().buildChatToken(userId, 10).block());
-            assertDoesNotThrow(
                     () -> this.service.user()
                             .buildCustomizedToken(userId, 10, accessToken2 -> {}));
         } else {
