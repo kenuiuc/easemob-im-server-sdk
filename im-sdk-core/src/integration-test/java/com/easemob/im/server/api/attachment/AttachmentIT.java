@@ -38,7 +38,7 @@ public class AttachmentIT extends AbstractIT {
                 ClassLoaderUtils.getDefaultClassLoader().getResource("download/attachment/")
                         .getPath());
         assertDoesNotThrow(() -> this.service.attachment()
-                .downloadFile(attachment.getId(), downloadPath, "file.png")
+                .downloadFile(attachment.getId(), downloadPath, "file.png", attachment.getSecret())
                 .block(Duration.ofSeconds(30)));
     }
 
