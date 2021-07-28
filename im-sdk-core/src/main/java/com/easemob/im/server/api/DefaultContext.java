@@ -49,7 +49,7 @@ public class DefaultContext implements Context {
 
         EMProperties.Realm realm = properties.getRealm();
         if (realm == EMProperties.Realm.AGORA_REALM) {
-            this.tokenProvider = new AgoraTokenProvider(properties.getAppId(), properties.getAppCert(), properties.getExpire());
+            this.tokenProvider = new AgoraTokenProvider(properties.getAppId(), properties.getAppCert(), properties.getExpireSeconds());
         } else if (realm == EMProperties.Realm.EASEMOB_REALM) {
             this.tokenProvider = new DefaultTokenProvider(properties, httpClient, this.endpointRegistry,
                     this.loadBalancer, this.codec, this.errorMapper);

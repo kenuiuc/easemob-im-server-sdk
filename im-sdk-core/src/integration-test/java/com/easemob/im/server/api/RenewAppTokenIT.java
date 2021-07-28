@@ -34,8 +34,8 @@ public class RenewAppTokenIT {
    }
 
    public RenewAppTokenIT() {
-      EMProperties agoraGateway = EMProperties.builder(EMProperties.Realm.AGORA_REALM)
-              .setExpire(20)
+      EMProperties agoraGateway = EMProperties.agoraRealmBuilder()
+              .setExpireSeconds(20)
               .setBaseUri(BASE_URI)
               .setAppkey(APP_KEY)
               .setAppId(APP_ID)

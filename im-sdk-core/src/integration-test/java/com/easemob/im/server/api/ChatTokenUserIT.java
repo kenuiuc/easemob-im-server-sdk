@@ -31,7 +31,7 @@ public class ChatTokenUserIT {
     private EMService service;
 
     ChatTokenUserIT() {
-        EMProperties properties = EMProperties.builder(EMProperties.Realm.AGORA_REALM)
+        EMProperties properties = EMProperties.agoraRealmBuilder()
                 .setBaseUri(BASE_URI)
                 .setAppkey(APP_KEY)
                 .setAppId(APP_ID)
