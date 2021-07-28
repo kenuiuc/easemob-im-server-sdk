@@ -5,8 +5,15 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Map;
 import java.util.TreeMap;
 
-// DO NOT TOUCH THIS CODE
-// TODO: import from maven repo once this token class is officially published
+// TODO: import from maven repo once this token class is officially published this September
+/**
+ * This class is copied from
+ * <a href="https://github.com/kenuiuc/Tools/blob/dev/accesstoken2/DynamicKey/AgoraDynamicKey/java/src/main/java/io/agora/media/AccessToken2.java">Agora Authentication Tool</a>
+ * <p>
+ * It serves as an authentication protocol among multiple Agora and Easemob Services
+ * <p>
+ * Do not change this class as it might break the authentication process
+ */
 public class AccessToken2 {
     public enum PrivilegeRtc {
         PRIVILEGE_JOIN_CHANNEL(1),
