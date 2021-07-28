@@ -108,29 +108,6 @@ public class EMProperties {
         this.appCert = appCert;
     }
 
-
-    private static EMProperties buildEasemobRealmProperties(String baseUri,
-            String appkey, EMProxy proxy, String clientId, String clientSecret,
-            int httpConnectionPoolSize, String serverTimezone) {
-        EMProperties properties = new EMProperties(Realm.EASEMOB_REALM, baseUri, appkey, proxy,
-                httpConnectionPoolSize, serverTimezone);
-        properties.setClientId(clientId);
-        properties.setClientSecret(clientSecret);
-        return properties;
-    }
-
-    private static EMProperties buildAgoraRealmProperties(int expireSeconds,
-            String baseUri, String appkey, EMProxy proxy, String appId, String appCert,
-            int httpConnectionPoolSize, String serverTimezone) {
-        EMProperties properties = new EMProperties(Realm.AGORA_REALM, baseUri, appkey, proxy,
-                httpConnectionPoolSize, serverTimezone);
-        properties.setExpireSeconds(expireSeconds);
-        properties.setAppId(appId);
-        properties.setAppCert(appCert);
-        return properties;
-    }
-
-
     public Realm getRealm() {
         return realm;
     }
@@ -254,10 +231,12 @@ public class EMProperties {
             if (this.appCert == null) {
                 throw new EMInvalidStateException("appCert not set");
             }
-            return buildAgoraRealmProperties(
-                    this.expireSeconds, this.baseUri, this.appkey, this.proxy, this.appId,
-                    this.appCert, this.httpConnectionPoolSize, this.serverTimezone
-            );
+            EMProperties properties = new EMProperties(Realm.AGORA_REALM, baseUri, appkey, proxy,
+                    httpConnectionPoolSize, serverTimezone);
+            properties.setExpireSeconds(expireSeconds);
+            properties.setAppId(appId);
+            properties.setAppCert(appCert);
+            return properties;
         }
     }
 
@@ -302,7 +281,9 @@ public class EMProperties {
             return this;
         }
 
-        public EasemobRealmBuilder setClientId(String clientId) { if (Strings.isBlank(clientId)) { throw new EMInvalidArgumentException("clientId must not be null or blank");
+        public EasemobRealmBuilder setClientId(String clientId) {
+            if (Strings.isBlank(clientId)) {
+                throw new EMInvalidArgumentException("clientId must not be null or blank");
             }
             this.clientId = clientId;
             return this;
@@ -326,8 +307,11 @@ public class EMProperties {
             if (this.clientSecret == null) {
                 throw new EMInvalidStateException("clientSecret not set");
             }
-            return buildEasemobRealmProperties(this.baseUri, this.appkey, this.proxy, this.clientId,
-                    this.clientSecret, this.httpConnectionPoolSize, this.serverTimezone);
+            EMProperties properties = new EMProperties(Realm.EASEMOB_REALM, baseUri, appkey, proxy,
+                            httpConnectionPoolSize, serverTimezone);
+            properties.setClientId(clientId);
+            properties.setClientSecret(clientSecret);
+            return properties;
         }
     }
 

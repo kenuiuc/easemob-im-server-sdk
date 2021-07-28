@@ -20,7 +20,7 @@ public class ChatTokenUserIT {
     private static final String BASE_URI = System.getenv("IM_BASE_URI");
     private static final String APP_KEY = System.getenv("IM_APPKEY");
     private static final String APP_ID = System.getenv("IM_APP_ID");
-    private static final String APP_CERTIFICATE = System.getenv("IM_APP_CERTIFICATE");
+    private static final String APP_CERT = System.getenv("IM_APP_CERT");
 
     private static final int EXPIRE_SECONDS = 3601;
     private static final String PASSWORD = "password";
@@ -35,7 +35,7 @@ public class ChatTokenUserIT {
                 .setBaseUri(BASE_URI)
                 .setAppkey(APP_KEY)
                 .setAppId(APP_ID)
-                .setAppCert(APP_CERTIFICATE)
+                .setAppCert(APP_CERT)
                 .setHttpConnectionPoolSize(10)
                 .setServerTimezone("+8")
                 .build();
