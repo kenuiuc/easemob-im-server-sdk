@@ -19,7 +19,7 @@ public class EMHttpClientFactory {
         HttpClient httpClient = HttpClient.create(connectionProvider)
                 .headers(headers -> headers.add("User-Agent",
                         String.format("EasemobServerSDK/%s", EMVersion.getVersion())))
-                .wiretap("com.easemob.im.http", LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL);
+                .wiretap("com.easemob.im.http", LogLevel.DEBUG, AdvancedByteBufFormat.SIMPLE);
         EMProxy proxyInfo = properties.getProxy();
         if (proxyInfo == null) {
             return httpClient;

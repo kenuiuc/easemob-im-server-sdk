@@ -18,13 +18,13 @@ jobs:
         run: mvn --batch-mode -Pci clean package
       - name: CodeCov
         uses: codecov/codecov-action@v1
-  integration:
+  IT-ebs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      IM_APPKEY: ${{ secrets.IM_APPKEY }}
-      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID }}
-      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET }}
+      IM_APPKEY: ${{ secrets.IM_APPKEY_EBS }}
+      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_EBS }}
+      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_EBS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -33,4 +33,58 @@ jobs:
         with:
           java-version: 1.8
       - name: Maven
-        run: mvn --batch-mode -Pci clean verify
+        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+  IT-sandbox-default:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      IM_BASE_URI: http://a1-hsb.easemob.com
+      IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
+      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_SANDBOX }}
+      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_SANDBOX }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Maven
+        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+  IT-sandbox-easemob-realm:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      IM_BASE_URI: http://a1-hsb.easemob.com
+      IM_REALM: EASEMOB_REALM
+      IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
+      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_SANDBOX }}
+      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_SANDBOX }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Maven
+        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+  IT-sandbox-agora-realm:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      IM_BASE_URI: http://a1-hsb.easemob.com
+      IM_REALM: AGORA_REALM
+      IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
+      IM_APP_ID: ${{ secrets.IM_APP_ID_SANDBOX }}
+      IM_APP_CERT: ${{ secrets.IM_APP_CERT_SANDBOX }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Maven
+        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+
