@@ -39,12 +39,18 @@ public class AgoraTokenIT {
     protected EMService service;
     HttpClient aliceEasemobTokenClient = null;
 
+    String realm = System.getenv("IM_REALM");
+    boolean isAgoraRealm = realm != null && realm.equals("AGORA_REALM");
+
     String appkey = System.getenv("IM_APPKEY");
     String baseUri = System.getenv("IM_BASE_URI");
     String appId = System.getenv("IM_APP_ID");
     String appCert = System.getenv("IM_APP_CERT");
 
     public AgoraTokenIT() {
+        if (!isAgoraRealm) {
+            return;
+        }
         EMProperties properties = EMProperties.agoraRealmBuilder()
                 .setBaseUri(baseUri)
                 .setAppkey(appkey)
@@ -57,12 +63,18 @@ public class AgoraTokenIT {
     // With an Easemob App Token you can GET all users
     @Test
     public void appTokenTest() {
+        if (!isAgoraRealm) {
+            return;
+        }
         assertDoesNotThrow(() -> this.service.user()
                 .listUsers(1, null).block(Duration.ofSeconds(REQUEST_TIMEOUT)));
     }
 
     @Test
     public void userTokenTest() throws Exception {
+        if (!isAgoraRealm) {
+            return;
+        }
         String aliceId = service.user().getUUID(ALICE_USER_NAME).block(Duration.ofSeconds(REQUEST_TIMEOUT));
         String aliceAgoraToken = service.user().getToken(aliceId, EXPIRE_IN_SECONDS,
             AccessToken2Utils.rtcPrivilegeAdder(DUMMY_CHANNEL_NAME, DUMMY_UID,
