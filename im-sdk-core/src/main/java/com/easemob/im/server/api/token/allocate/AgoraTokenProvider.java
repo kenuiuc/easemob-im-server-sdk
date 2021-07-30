@@ -1,12 +1,14 @@
 package com.easemob.im.server.api.token.allocate;
 
 import com.easemob.im.server.api.token.Token;
+import com.easemob.im.server.api.token.agora.AccessToken2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Consumer;
 
 public class AgoraTokenProvider implements TokenProvider {
     private static final Logger log = LoggerFactory.getLogger(DefaultTokenProvider.class);
@@ -34,13 +36,13 @@ public class AgoraTokenProvider implements TokenProvider {
         return this.appToken;
     }
 
+
     @Override
-    public Mono<Token> buildUserToken(String userId, int expireSeconds) {
-        final String userTokenValue;
-        userTokenValue = AccessToken2Utils
-                .buildUserChatToken(appId, appCert, userId, expireSeconds);
+    public Mono<Token> buildCustomizedToken(String userId, int expireSeconds,
+            Consumer<AccessToken2> tokenConfigurer) throws Exception {
+        String token2Value = AccessToken2Utils
+                .buildCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
         final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
-        final Token userToken = new Token(userTokenValue, expireAt);
-        return Mono.just(userToken);
+        return Mono.just(new Token(token2Value, expireAt));
     }
 }

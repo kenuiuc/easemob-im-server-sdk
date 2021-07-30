@@ -1,11 +1,8 @@
 package com.easemob.im.server.api.user;
 
-import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.api.Context;
 import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
-import com.easemob.im.server.api.token.agora.AccessToken2.PrivilegeChat;
-import com.easemob.im.server.api.token.allocate.AccessToken2Utils;
 import com.easemob.im.server.api.user.create.CreateUser;
 import com.easemob.im.server.api.user.forcelogout.ForceLogoutUser;
 import com.easemob.im.server.api.user.get.UserGet;
@@ -13,9 +10,7 @@ import com.easemob.im.server.api.user.list.ListUsers;
 import com.easemob.im.server.api.user.password.UpdateUserPassword;
 import com.easemob.im.server.api.user.status.UserStatus;
 import com.easemob.im.server.api.user.unregister.DeleteUser;
-import com.easemob.im.server.exception.EMForbiddenException;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
-import com.easemob.im.server.exception.EMInvalidStateException;
 import com.easemob.im.server.model.EMPage;
 import com.easemob.im.server.model.EMUser;
 import org.slf4j.Logger;
@@ -23,12 +18,7 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * 用户API。
@@ -202,25 +192,10 @@ public class UserApi {
         return this.context.getTokenProvider().fetchUserToken(username, password);
     }
 
-    public Mono<Token> buildCustomizedToken(String userId, int expireSeconds,
-            Consumer<AccessToken2> tokenConfigurer) throws Exception {
-        validateAgoraRealm();
-        String appId = this.context.getProperties().getAppId();
-        String appCert = this.context.getProperties().getAppCert();
-        String token2Value = AccessToken2Utils
-                .buildCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
-
-        final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
-        return Mono.just(new Token(token2Value, expireAt));
+    // TODO: here we have 2 ways of getting an user token and we need a better design
+    public Mono<Token> buildCustomizedToken
+            (String userId, int expireSeconds, Consumer<AccessToken2> tokenConfigurer) throws Exception {
+        return this.context.getTokenProvider()
+                .buildCustomizedToken(userId, expireSeconds, tokenConfigurer);
     }
-
-    // TODO: remove this validation
-    private void validateAgoraRealm() {
-        EMProperties properties = this.context.getProperties();
-        EMProperties.Realm realm = properties.getRealm();
-        if (realm != EMProperties.Realm.AGORA_REALM) {
-            throw new EMInvalidStateException("current realm in use is not Agora Realm");
-        }
-    }
-
 }
