@@ -38,10 +38,10 @@ public class AgoraTokenProvider implements TokenProvider {
 
 
     @Override
-    public Mono<Token> buildCustomizedToken(String userId, int expireSeconds,
+    public Mono<Token> buildUserToken(String userId, int expireSeconds,
             Consumer<AccessToken2> tokenConfigurer) throws Exception {
         String token2Value = AccessToken2Utils
-                .buildCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
+                .buildUserCustomizedToken(appId, appCert, userId, expireSeconds, tokenConfigurer);
         final Instant expireAt = Instant.now().plusSeconds(expireSeconds);
         return Mono.just(new Token(token2Value, expireAt));
     }

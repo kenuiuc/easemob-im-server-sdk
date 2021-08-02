@@ -3,6 +3,7 @@ package com.easemob.im.server.api.token.allocate;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.exception.EMForbiddenException;
 import com.easemob.im.server.exception.EMInvalidStateException;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class AccessToken2Utils {
         }
     }
 
-    public static String buildCustomizedToken(String appId, String appCert, String userId,
+    public static String buildUserCustomizedToken(String appId, String appCert, String userId,
             int expire, Consumer<AccessToken2> tokenConfigurer) {
 
         AccessToken2 accessToken = new AccessToken2(appId, appCert, expire);
@@ -52,7 +53,7 @@ public class AccessToken2Utils {
         accessToken.addService(serviceChat);
 
         tokenConfigurer.accept(accessToken);
-        validateAccessToken2(accessToken);
+        validateUserChatToken(accessToken);
 
         try {
             return accessToken.build();
@@ -62,25 +63,24 @@ public class AccessToken2Utils {
         }
     }
 
-    private static void validateAccessToken2(AccessToken2 token) {
-        AccessToken2.Service service = token.getService(AccessToken2.SERVICE_TYPE_CHAT);
+    // must include userId if it has the chat.user privilege
+    // must not have chat.app privilege
+    private static void validateUserChatToken(AccessToken2 token) {
+        AccessToken2.Service service = token.services.get(AccessToken2.SERVICE_TYPE_CHAT);
         if (service == null) {
             return;
         }
         AccessToken2.ServiceChat serviceChat = (AccessToken2.ServiceChat) service;
         String userId = serviceChat.getUserId();
         Map<Short, Integer> chatPrivileges = serviceChat.getPrivileges();
-        boolean hasUserId = userId != null;
+        boolean hasUserId = Strings.isNotBlank(userId);
         boolean hasAppPrivilege = chatPrivileges.get(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP.intValue) != null;
         boolean hasUserPrivilege = chatPrivileges.get(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER.intValue) != null;
-        if (hasAppPrivilege && hasUserPrivilege) {
-            throw new EMForbiddenException("accessToken cannot include both chatApp and chatUser privileges at the same time");
-        }
-        if (hasAppPrivilege && hasUserId) {
-            throw new EMForbiddenException("accessToken cannot include both chatApp privilege and userId at the same time");
+        if (hasAppPrivilege) {
+            throw new EMForbiddenException("userToken must not have chat app privilege");
         }
         if (hasUserPrivilege && !hasUserId) {
-            throw new EMForbiddenException("accessToken with a chatUser privilege must include an userId");
+            throw new EMForbiddenException("accessToken with the chatUser privilege must include an userId");
         }
     }
 }

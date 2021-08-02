@@ -36,7 +36,7 @@ public class AgoraTokenProviderTest {
     public void builderUserToken() throws Exception {
         TokenProvider tokenProvider = new AgoraTokenProvider(DUMMY_APP_ID, DUMMY_APP_CERT,
                 DUMMY_EXPIRE_SECONDS);
-        Token userToken = tokenProvider.buildCustomizedToken(DUMMY_USER_ID,
+        Token userToken = tokenProvider.buildUserToken(DUMMY_USER_ID,
                 DUMMY_EXPIRE_SECONDS, token -> {}).block();
         String userTokenValue = userToken.getValue();
         AccessToken2 accessToken = new AccessToken2();

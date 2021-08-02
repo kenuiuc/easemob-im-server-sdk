@@ -58,7 +58,7 @@ public class ChatTokenUserIT {
 
     @Test
     public void buildChatUserToken() throws Exception {
-        Token userToken = service.user().buildCustomizedToken(USER_ID,
+        Token userToken = service.user().getToken(USER_ID,
                 EXPIRE_SECONDS,token -> {}).block();
         assertNotNull(userToken);
         String userTokenValue = userToken.getValue();

@@ -1,6 +1,7 @@
 package com.easemob.im.server.api.token.allocate;
 
 import com.easemob.im.server.api.token.agora.AccessToken2;
+import com.easemob.im.server.exception.EMForbiddenException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -26,10 +27,10 @@ public class AccessToken2UtilsTest {
 
         assertEquals(DUMMY_APP_ID, accessToken.appId);
         assertEquals(DUMMY_EXPIRE_SECONDS, accessToken.expire);
-        assertEquals("", ((AccessToken2.ServiceChat)accessToken.services
+        assertEquals("", ((AccessToken2.ServiceChat) accessToken.services
                 .get(AccessToken2.SERVICE_TYPE_CHAT)).getUserId());
         assertEquals(
-                DUMMY_EXPIRE_SECONDS, (int)accessToken.services.get(AccessToken2.SERVICE_TYPE_CHAT)
+                DUMMY_EXPIRE_SECONDS, (int) accessToken.services.get(AccessToken2.SERVICE_TYPE_CHAT)
                         .getPrivileges().get(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP.intValue)
         );
     }
@@ -43,17 +44,18 @@ public class AccessToken2UtilsTest {
 
         assertEquals(DUMMY_APP_ID, accessToken.appId);
         assertEquals(DUMMY_EXPIRE_SECONDS, accessToken.expire);
-        assertEquals(DUMMY_USER_NAME, ((AccessToken2.ServiceChat)accessToken.services
+        assertEquals(DUMMY_USER_NAME, ((AccessToken2.ServiceChat) accessToken.services
                 .get(AccessToken2.SERVICE_TYPE_CHAT)).getUserId());
         assertEquals(
-                DUMMY_EXPIRE_SECONDS, (int)accessToken.services.get(AccessToken2.SERVICE_TYPE_CHAT)
-                        .getPrivileges().get(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER.intValue));
+                DUMMY_EXPIRE_SECONDS, (int) accessToken.services.get(AccessToken2.SERVICE_TYPE_CHAT)
+                        .getPrivileges()
+                        .get(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_USER.intValue));
     }
 
     @Test
-    public void buildCustomizedToken() {
-        String customizedTokenValue = AccessToken2Utils.buildCustomizedToken(
-                DUMMY_APP_ID, DUMMY_APP_CERT, DUMMY_USER_ID, DUMMY_EXPIRE_SECONDS, token ->{
+    public void buildUserCustomizedToken() {
+        String customizedTokenValue = AccessToken2Utils.buildUserCustomizedToken(
+                DUMMY_APP_ID, DUMMY_APP_CERT, DUMMY_USER_ID, DUMMY_EXPIRE_SECONDS, token -> {
                     AccessToken2.ServiceRtc serviceRtc =
                             new AccessToken2.ServiceRtc(DUMMY_CHANNEL_NAME, DUMMY_UID);
                     serviceRtc.addPrivilegeRtc(AccessToken2.PrivilegeRtc.PRIVILEGE_JOIN_CHANNEL,
@@ -87,5 +89,21 @@ public class AccessToken2UtilsTest {
         int expireInTokenRtc = privilegesRtc
                 .get(AccessToken2.PrivilegeRtc.PRIVILEGE_JOIN_CHANNEL.intValue);
         assertEquals(DUMMY_EXPIRE_SECONDS, expireInTokenRtc);
+    }
+
+    @Test
+    public void buildInvalidUserToken() {
+        // adding chat app privilege is not allowed
+        assertThrows(EMForbiddenException.class, () -> {
+            AccessToken2Utils.buildUserCustomizedToken(
+                    DUMMY_APP_ID, DUMMY_APP_CERT, DUMMY_USER_ID, DUMMY_EXPIRE_SECONDS,
+                    token -> {
+                        AccessToken2.ServiceChat serviceChat =
+                                (AccessToken2.ServiceChat) token.services
+                                        .get(AccessToken2.SERVICE_TYPE_CHAT);
+                        serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP,
+                                DUMMY_EXPIRE_SECONDS);
+                    });
+        });
     }
 }
