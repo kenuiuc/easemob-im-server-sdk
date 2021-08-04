@@ -18,7 +18,7 @@ public class AttachmentIT extends AbstractIT {
         super();
     }
 
-    @Test
+    @Disabled
     void testAttachmentUpload() {
         String path =
                 ClassLoaderUtils.getDefaultClassLoader().getResource("upload/image.png").getPath();
