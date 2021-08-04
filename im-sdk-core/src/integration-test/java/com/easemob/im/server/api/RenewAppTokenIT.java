@@ -50,12 +50,12 @@ public class RenewAppTokenIT {
    public void getUser() {
       String randomUserName = makeRandomUserName();
       assertDoesNotThrow(() -> this.service.user().create(randomUserName, randomUserName)
-              .block(Duration.ofSeconds(30)));
+              .block(Duration.ofSeconds(10)));
       int successCount = 0;
       try {
          for (int i = 0; i < 30; i ++) {
             sleep(1);
-            EMUser user = service.user().get(randomUserName).block(Duration.ofSeconds(30));
+            EMUser user = service.user().get(randomUserName).block(Duration.ofSeconds(10));
             successCount ++;
          }
       } catch (Throwable th) {
