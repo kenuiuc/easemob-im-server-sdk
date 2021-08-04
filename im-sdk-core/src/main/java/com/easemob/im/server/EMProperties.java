@@ -8,6 +8,8 @@ import org.apache.logging.log4j.util.Strings;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import static com.easemob.im.server.api.token.agora.Utils.isUUID;
+
 /**
  * Server SDK配置类
  */
@@ -29,10 +31,11 @@ public class EMProperties {
         }
     }
 
-    // Easemob only fields
+    // Easemob Realm only fields
     private String clientId;
     private String clientSecret;
 
+    // Agora Realm only fields
     private String appId;
     private String appCert;
 
@@ -42,6 +45,22 @@ public class EMProperties {
     private final EMProxy proxy;
     private final int httpConnectionPoolSize;
     private final String serverTimezone;
+
+    @Override
+    public String toString() {
+        return "EMProperties{" +
+                "clientId='" + clientId + '\'' +
+                ", clientSecret='" + clientSecret + '\'' +
+                ", appId='" + appId + '\'' +
+                ", appCert='" + appCert + '\'' +
+                ", realm=" + realm +
+                ", baseUri='" + baseUri + '\'' +
+                ", appkey='" + appkey + '\'' +
+                ", proxy=" + proxy +
+                ", httpConnectionPoolSize=" + httpConnectionPoolSize +
+                ", serverTimezone='" + serverTimezone + '\'' +
+                '}';
+    }
 
     public enum Realm {
         AGORA_REALM(1),
@@ -94,10 +113,16 @@ public class EMProperties {
     }
 
     private void setAppId(String appId) {
+        if (Strings.isBlank(appId) || !isUUID(appId)) {
+            throw new EMInvalidArgumentException("appId must be an UUID");
+        }
         this.appId = appId;
     }
 
     private void setAppCert(String appCert) {
+        if (Strings.isBlank(appCert) || !isUUID(appCert)) {
+            throw new EMInvalidArgumentException("appCert must be an UUID");
+        }
         this.appCert = appCert;
     }
 
@@ -219,6 +244,19 @@ public class EMProperties {
             properties.setAppCert(appCert);
             return properties;
         }
+
+        @Override
+        public String toString() {
+            return "AgoraRealmBuilder{" +
+                    "appId='" + appId + '\'' +
+                    ", appCert='" + appCert + '\'' +
+                    ", baseUri='" + baseUri + '\'' +
+                    ", appkey='" + appkey + '\'' +
+                    ", proxy=" + proxy +
+                    ", httpConnectionPoolSize=" + httpConnectionPoolSize +
+                    ", serverTimezone='" + serverTimezone + '\'' +
+                    '}';
+        }
     }
 
     public static class EasemobRealmBuilder {
@@ -293,6 +331,19 @@ public class EMProperties {
             properties.setClientId(clientId);
             properties.setClientSecret(clientSecret);
             return properties;
+        }
+
+        @Override
+        public String toString() {
+            return "EasemobRealmBuilder{" +
+                    "clientId='" + clientId + '\'' +
+                    ", clientSecret='" + clientSecret + '\'' +
+                    ", baseUri='" + baseUri + '\'' +
+                    ", appkey='" + appkey + '\'' +
+                    ", proxy=" + proxy +
+                    ", httpConnectionPoolSize=" + httpConnectionPoolSize +
+                    ", serverTimezone='" + serverTimezone + '\'' +
+                    '}';
         }
     }
 
