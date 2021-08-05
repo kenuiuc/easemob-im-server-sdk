@@ -55,6 +55,7 @@ public class RenewAppTokenIT {
          for (int i = 0; i < 30; i ++) {
             sleep(1);
             EMUser user = service.user().get(randomUserName).block(Duration.ofSeconds(10));
+            log.info("EMUser_{} = {}", i, user);
             successCount ++;
          }
       } catch (Throwable th) {
