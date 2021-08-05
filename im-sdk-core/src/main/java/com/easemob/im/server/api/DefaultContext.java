@@ -5,7 +5,6 @@ import com.easemob.im.server.api.codec.JsonCodec;
 import com.easemob.im.server.api.loadbalance.*;
 import com.easemob.im.server.api.token.allocate.AgoraTokenProvider;
 import com.easemob.im.server.api.token.allocate.DefaultTokenProvider;
-import com.easemob.im.server.api.token.allocate.ExchangeTokenProvider;
 import com.easemob.im.server.api.token.allocate.TokenProvider;
 import com.easemob.im.server.exception.EMInvalidStateException;
 import org.slf4j.Logger;
@@ -50,7 +49,7 @@ public class DefaultContext implements Context {
 
         EMProperties.Realm realm = properties.getRealm();
         if (realm == EMProperties.Realm.AGORA_REALM) {
-            this.tokenProvider = new ExchangeTokenProvider(properties, httpClient, this.endpointRegistry,
+            this.tokenProvider = new AgoraTokenProvider(properties, httpClient, this.endpointRegistry,
                     this.loadBalancer, this.codec, this.errorMapper);
         } else if (realm == EMProperties.Realm.EASEMOB_REALM) {
             this.tokenProvider = new DefaultTokenProvider(properties, httpClient, this.endpointRegistry,
