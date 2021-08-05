@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class AgoraTokenProvider implements TokenProvider {
     private static final Logger log = LoggerFactory.getLogger(DefaultTokenProvider.class);
-    private static final int EXPIRE_SECONDS = 600;
+    private static final int EXPIRE_IN_SECONDS = 600;
 
     private final String appId;
     private final String appCert;
@@ -22,10 +22,10 @@ public class AgoraTokenProvider implements TokenProvider {
         this.appId = appId;
         this.appCert = appCert;
         this.appToken = Mono.fromCallable(() -> {
-            final String appTokenValue = AccessToken2Utils.buildAppToken(appId, appCert, EXPIRE_SECONDS);
-            final Instant expireAt = Instant.now().plusSeconds(EXPIRE_SECONDS);
+            final String appTokenValue = AccessToken2Utils.buildAppToken(appId, appCert, EXPIRE_IN_SECONDS);
+            final Instant expireAt = Instant.now().plusSeconds(EXPIRE_IN_SECONDS);
             return new Token(appTokenValue, expireAt);
-        }).cache(token -> Duration.ofSeconds(EXPIRE_SECONDS).dividedBy(2),
+        }).cache(token -> Duration.ofSeconds(EXPIRE_IN_SECONDS).dividedBy(2),
                 error -> Duration.ofSeconds(10),
                 () -> Duration.ofSeconds(10)
         );

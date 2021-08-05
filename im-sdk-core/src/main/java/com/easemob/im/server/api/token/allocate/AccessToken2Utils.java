@@ -33,7 +33,7 @@ public class AccessToken2Utils {
 
     public static String buildAppToken(String appId, String appCert, int expireInSeconds) {
         int expireOnSeconds = toExpireOnSeconds(expireInSeconds);
-        log.info("building appToken with expireInSeconds = {}, expireOnSeconds = {}", expireInSeconds, expireOnSeconds);
+        log.info("buildingAppToken with expireInSeconds = {}, expireOnSeconds = {}", expireInSeconds, expireOnSeconds);
 
         AccessToken2 accessToken = new AccessToken2(appId, appCert, expireOnSeconds);
         AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
