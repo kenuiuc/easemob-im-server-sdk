@@ -6,6 +6,7 @@ import com.easemob.im.server.exception.EMNotFoundException;
 import com.easemob.im.server.model.EMBlock;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -274,7 +275,7 @@ class UserIT extends AbstractIT {
                 .block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testUserCountMissedMessages() {
         String randomUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
