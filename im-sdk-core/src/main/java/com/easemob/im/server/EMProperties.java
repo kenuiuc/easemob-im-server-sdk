@@ -8,8 +8,6 @@ import org.apache.logging.log4j.util.Strings;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import static com.easemob.im.server.api.token.agora.Utils.isUUID;
-
 /**
  * Server SDK配置类
  */
@@ -113,15 +111,15 @@ public class EMProperties {
     }
 
     private void setAppId(String appId) {
-        if (Strings.isBlank(appId) || !isUUID(appId)) {
-            throw new EMInvalidArgumentException("appId must be an UUID");
+        if (Strings.isBlank(appId)) {
+            throw new EMInvalidArgumentException("appId must not be null or blank");
         }
         this.appId = appId;
     }
 
     private void setAppCert(String appCert) {
-        if (Strings.isBlank(appCert) || !isUUID(appCert)) {
-            throw new EMInvalidArgumentException("appCert must be an UUID");
+        if (Strings.isBlank(appCert)) {
+            throw new EMInvalidArgumentException("appCert must not be null or blank");
         }
         this.appCert = appCert;
     }
