@@ -4,6 +4,7 @@ import com.easemob.im.server.api.AbstractIT;
 import com.easemob.im.server.api.util.Utilities;
 import com.easemob.im.server.model.EMKeyValue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import java.net.URI;
 
@@ -15,7 +16,7 @@ public class MessageIT extends AbstractIT {
         super();
     }
 
-    @Test
+    @Disabled
     void testMessageSendText() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -38,7 +39,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendImage() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -66,7 +67,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendVoice() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -94,7 +95,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendVideo() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -123,7 +124,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendFile() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -149,7 +150,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendLocation() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -172,7 +173,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendCommand() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
@@ -195,7 +196,7 @@ public class MessageIT extends AbstractIT {
                 () -> this.service.user().delete(randomToUsername).block(Utilities.IT_TIMEOUT));
     }
 
-    @Test
+    @Disabled
     void testMessageSendCustom() {
         String randomFromUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
