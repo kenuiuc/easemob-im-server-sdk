@@ -10,7 +10,10 @@ import com.easemob.im.server.api.token.allocate.TokenResponse;
 import com.easemob.im.server.api.user.get.UserGetResponse;
 import com.easemob.im.server.exception.EMUnauthorizedException;
 import com.easemob.im.server.model.EMUser;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -21,6 +24,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AgoraTokenIT {
 
     private static final AccessToken2.PrivilegeRtc DUMMY_RTC_PRIVILEGE =
@@ -39,12 +43,15 @@ public class AgoraTokenIT {
     protected EMService service;
     HttpClient aliceEasemobTokenClient = null;
 
+    String realm = System.getenv("IM_REALM");
     String appkey = System.getenv("IM_APPKEY");
     String baseUri = System.getenv("IM_BASE_URI");
     String appId = System.getenv("IM_APP_ID");
     String appCert = System.getenv("IM_APP_CERT");
 
-    public AgoraTokenIT() {
+    @BeforeAll
+    public void init() {
+        Assumptions.assumeTrue(EMProperties.Realm.AGORA_REALM.name().equals(realm));
         EMProperties properties = EMProperties.agoraRealmBuilder()
                 .setBaseUri(baseUri)
                 .setAppkey(appkey)
