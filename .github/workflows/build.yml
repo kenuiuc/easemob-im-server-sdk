@@ -18,13 +18,13 @@ jobs:
         run: mvn --batch-mode -Pci clean package
       - name: CodeCov
         uses: codecov/codecov-action@v1
-  integration:
+  IT-ebs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      IM_APPKEY: ${{ secrets.IM_APPKEY }}
-      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID }}
-      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET }}
+      IM_APPKEY: ${{ secrets.IM_APPKEY_EBS }}
+      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_EBS }}
+      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_EBS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -33,4 +33,5 @@ jobs:
         with:
           java-version: 1.8
       - name: Maven
-        run: mvn --batch-mode -Pci clean verify
+        run: mvn --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+
