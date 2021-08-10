@@ -48,12 +48,4 @@ public class DefaultTokenProviderTest extends AbstractApiTest {
                 .put("expires_in", 3600);
     }
 
-    @Test
-    public void testFetchUserToken() {
-        Token appToken = this.tokenProvider.fetchUserToken("username", "password")
-                .block(Duration.ofSeconds(3));
-        assertEquals("access_token", appToken.getValue());
-        assertTrue(appToken.isValid());
-    }
-
 }

@@ -7,6 +7,7 @@ import com.easemob.im.server.api.loadbalance.EndpointRegistry;
 import com.easemob.im.server.api.loadbalance.LoadBalancer;
 import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
+import com.easemob.im.server.exception.EMInvalidStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,8 @@ import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.function.Consumer;
+
+import static com.easemob.im.server.api.util.Utilities.toExpireOnSeconds;
 
 public class AgoraTokenProvider implements TokenProvider {
 
@@ -58,23 +60,13 @@ public class AgoraTokenProvider implements TokenProvider {
         return this.appToken;
     }
 
-    @Override
-    public Mono<Token> buildUserToken(String userId, int expireInSeconds,
-            Consumer<AccessToken2> tokenConfigurer) throws Exception {
-        String token2Value = AccessToken2Utils
-                .buildUserCustomizedToken(properties.getAppId(), properties.getAppCert(), userId,
-                        expireInSeconds, tokenConfigurer);
-        final Instant expireAt = Instant.now().plusSeconds(expireInSeconds);
-        return Mono.just(new Token(token2Value, expireAt));
-    }
-
     private Mono<Token> fetchEasemobToken(String appId, String appCert) {
         return endpointRegistry.endpoints()
                 .map(this.loadBalancer::loadBalance)
                 .flatMap(endpoint -> this.httpClient
                         .baseUrl(String.format("%s/%s/token", endpoint.getUri(),
                                 this.properties.getAppkeySlashDelimited()))
-                        .headersWhen(headers -> buildAppTokenMono(appId, appCert)
+                        .headersWhen(headers -> Mono.fromCallable(() -> buildAppToken(appId, appCert))
                                 .map(token -> headers
                                         .set("Authorization", String.format("Bearer %s", token))))
                         .post()
@@ -85,8 +77,21 @@ public class AgoraTokenProvider implements TokenProvider {
                 .map(TokenResponse::asToken);
     }
 
-    private Mono<String> buildAppTokenMono(String appId, String appCert) {
-        return Mono.fromCallable(
-                () -> AccessToken2Utils.buildAppToken(appId, appCert, EXPIRE_IN_SECONDS));
+    private String buildAppToken(String appId, String appCert) {
+        int expireOnSeconds = toExpireOnSeconds(EXPIRE_IN_SECONDS);
+        Instant expireDate = Instant.ofEpochSecond(expireOnSeconds);
+        log.debug("buildingAppToken with expireInSeconds = {}, expireOnSeconds = {}, expireDate = {}",
+                EXPIRE_IN_SECONDS, expireOnSeconds, expireDate.toString());
+
+        AccessToken2 accessToken = new AccessToken2(appId, appCert, expireOnSeconds);
+        AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
+        serviceChat.addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP, expireOnSeconds);
+        accessToken.addService(serviceChat);
+        try {
+            return accessToken.build();
+        } catch (Exception e) {
+            log.error("building accessToken2 failed", e);
+            throw new EMInvalidStateException("building accessToken2 failed");
+        }
     }
 }

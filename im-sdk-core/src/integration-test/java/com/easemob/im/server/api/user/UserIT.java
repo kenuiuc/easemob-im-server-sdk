@@ -1,6 +1,5 @@
 package com.easemob.im.server.api.user;
 
-import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.api.AbstractIT;
 import com.easemob.im.server.exception.EMNotFoundException;
 import com.easemob.im.server.model.EMBlock;
@@ -349,17 +348,8 @@ class UserIT extends AbstractIT {
         String randomPassword = randomUsername;
         assertDoesNotThrow(
                 () -> this.service.user().create(randomUsername, randomPassword).block());
-        String userId = this.service.user().getUUID(randomUsername).block();
-        EMProperties.Realm realm = this.service.getContext().getProperties().getRealm();
-        // TODO: doc this confusion
-        if (realm == EMProperties.Realm.AGORA_REALM) {
-            assertDoesNotThrow(
-                    () -> this.service.user()
-                            .getToken(userId, 10, accessToken2 -> {}));
-        } else {
-            assertDoesNotThrow(
-                    () -> this.service.user().getToken(randomUsername, randomPassword).block());
-        }
+        // TODO: doc this confusion -> but this one should be working for both Realms
+        assertDoesNotThrow(() -> this.service.user().getToken(randomUsername, randomPassword).block());
     }
 
 }
