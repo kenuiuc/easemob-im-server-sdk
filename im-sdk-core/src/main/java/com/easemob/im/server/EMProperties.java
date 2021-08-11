@@ -56,7 +56,20 @@ public class EMProperties {
     public String getClientSecret() {
         return this.credentials.getClientSecret();
     }
+    public String getAppId() {
+        return this.credentials.getAppId();
+    }
+    public String getAppCert() {
+        return this.credentials.getAppCert();
+    }
 
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
 
     // easemob realm by default
     public static Builder builder() {
@@ -93,11 +106,11 @@ public class EMProperties {
 
     public static class Builder {
         private Realm realm;
-        private String appkey;
+        private String appKey;
         private String clientId;
         private String clientSecret;
         private String appId;
-        private String appSecret;
+        private String appCert;
 
         private String baseUri;
         private EMProxy proxy;
@@ -109,45 +122,21 @@ public class EMProperties {
             return this;
         }
 
-        public Builder setAppId(String appId) {
-            this.appId = appId;
-            return this;
-        }
-
-        public Builder setAppSecret(String appSecret) {
-            this.appSecret = appSecret;
-            return this;
-        }
-
-        public Builder setBaseUri(String baseUri) {
-            this.baseUri = baseUri;
-            return this;
-        }
-
-        public Builder setAppkey(String appkey) {
-            if (Strings.isBlank(appkey)) {
-                throw new EMInvalidArgumentException("appkey must not be null or blank");
+        public Builder setAppkey(String appKey) {
+            if (Strings.isBlank(appKey)) {
+                throw new EMInvalidArgumentException("appKey must not be null or blank");
             }
-
-            String[] tokens = appkey.split("#");
+            String[] tokens = appKey.split("#");
             if (tokens.length != 2) {
-                throw new EMInvalidArgumentException("appkey must contains #");
+                throw new EMInvalidArgumentException("appKey must contains #");
             }
-
             if (tokens[0].isEmpty()) {
-                throw new EMInvalidArgumentException("appkey must contains {org}");
+                throw new EMInvalidArgumentException("appKey must contains {org}");
             }
-
             if (tokens[1].isEmpty()) {
-                throw new EMInvalidArgumentException("appkey must contains {app}");
+                throw new EMInvalidArgumentException("appKey must contains {app}");
             }
-
-            this.appkey = appkey;
-            return this;
-        }
-
-        public Builder setProxy(EMProxy proxy) {
-            this.proxy = proxy;
+            this.appKey = appKey;
             return this;
         }
 
@@ -155,7 +144,6 @@ public class EMProperties {
             if (Strings.isBlank(clientId)) {
                 throw new EMInvalidArgumentException("clientId must not be null or blank");
             }
-
             this.clientId = clientId;
             return this;
         }
@@ -164,8 +152,33 @@ public class EMProperties {
             if (Strings.isBlank(clientSecret)) {
                 throw new EMInvalidArgumentException("clientSecret must not be null or blank");
             }
-
             this.clientSecret = clientSecret;
+            return this;
+        }
+
+        public Builder setAppId(String appId) {
+            if (Strings.isBlank(appId)) {
+                throw new EMInvalidArgumentException("appId must not be null or blank");
+            }
+            this.appId = appId;
+            return this;
+        }
+
+        public Builder setAppCert(String appCert) {
+            if (Strings.isBlank(appCert)) {
+                throw new EMInvalidArgumentException("appCert must not be null or blank");
+            }
+            this.appCert = appCert;
+            return this;
+        }
+
+        public Builder setBaseUri(String baseUri) {
+            this.baseUri = baseUri;
+            return this;
+        }
+
+        public Builder setProxy(EMProxy proxy) {
+            this.proxy = proxy;
             return this;
         }
 
@@ -173,7 +186,6 @@ public class EMProperties {
             if (httpConnectionPoolSize < 0) {
                 throw new EMInvalidArgumentException("httpConnectionPoolSize must not be negative");
             }
-
             this.httpConnectionPoolSize = httpConnectionPoolSize;
             return this;
         }
@@ -184,19 +196,41 @@ public class EMProperties {
         }
 
         public EMProperties build() {
-            if (this.appkey == null) {
-                throw new EMInvalidStateException("appkey not set");
+            if (this.realm == null) {
+                throw new EMInvalidStateException("realm not set");
             }
-            if (this.clientId == null) {
-                throw new EMInvalidStateException("clientId not set");
+            if (this.appKey == null) {
+                throw new EMInvalidStateException("appKey not set");
             }
-            if (this.clientSecret == null) {
-                throw new EMInvalidStateException("clientSecret not set");
+            if (this.realm.equals(Realm.EASEMOB_REALM)) {
+                if (this.clientId == null) {
+                    throw new EMInvalidStateException("clientId not set");
+                }
+                if (this.clientSecret == null) {
+                    throw new EMInvalidStateException("clientSecret not set");
+                }
+                if (this.appId != null || this.appCert != null) {
+                    throw new EMInvalidStateException("appId and appCert must be blank");
+                }
+                EasemobAppCredentials credentials = new EasemobAppCredentials(this.appKey, this.clientId, this.clientSecret);
+                return new EMProperties(this.realm, credentials, this.baseUri, this.proxy,
+                        this.httpConnectionPoolSize, this.serverTimezone);
+            } else if (this.realm.equals(Realm.AGORA_REALM)) {
+                if (this.appId == null) {
+                    throw new EMInvalidStateException("appId not set");
+                }
+                if (this.appCert == null) {
+                    throw new EMInvalidStateException("appCert not set");
+                }
+                if (this.clientId != null || this.clientSecret != null) {
+                    throw new EMInvalidStateException("clientId and clientSecret must be blank");
+                }
+                AgoraAppCredentials credentials = new AgoraAppCredentials(this.appKey, this.appId, this.appCert);
+                return new EMProperties(this.realm, credentials, this.baseUri, this.proxy,
+                        this.httpConnectionPoolSize, this.serverTimezone);
+            } else {
+                throw new EMInvalidStateException(String.format("invalid realm type %s", this.realm.name()));
             }
-
-            return new EMProperties(this.baseUri, this.appkey, this.proxy, this.clientId,
-                    this.clientSecret,
-                    this.httpConnectionPoolSize, this.serverTimezone);
         }
     }
 }
