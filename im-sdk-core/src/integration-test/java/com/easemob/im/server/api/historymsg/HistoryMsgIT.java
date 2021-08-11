@@ -1,12 +1,12 @@
 package com.easemob.im.server.api.historymsg;
 
 import com.easemob.im.server.api.AbstractIT;
+import com.easemob.im.server.api.util.Utilities;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +29,7 @@ public class HistoryMsgIT extends AbstractIT {
     void testHistoryMsgGetAsLocalFile() {
         Path path = FileSystems.getDefault().getPath("path");
         assertDoesNotThrow(() -> this.service.message().getHistoryAsLocalFile(Instant.ofEpochSecond(1616407200),
-                path, "history.gz").block(Duration.ofSeconds(10)));
+                path, "history.gz").block(Utilities.IT_TIMEOUT));
     }
 
 }

@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
+import com.easemob.im.server.api.util.Utilities;
 
-import java.time.Duration;
 import java.util.function.Consumer;
 
 import static com.easemob.im.server.api.util.Utilities.toExpireOnSeconds;
@@ -33,7 +33,6 @@ public class AgoraTokenIT {
     private static final String DUMMY_CHANNEL_NAME = "dummyChannelName";
     private static final String DUMMY_UID = "dummyUID";
     private static final int EXPIRE_IN_SECONDS = 600;
-    private static final int REQUEST_TIMEOUT = 10;
 
     private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
     // this name must be yifan3 for now
@@ -68,15 +67,15 @@ public class AgoraTokenIT {
     @Test
     public void appTokenTest() {
         assertDoesNotThrow(() -> this.service.user()
-                .listUsers(1, null).block(Duration.ofSeconds(REQUEST_TIMEOUT)));
+                .listUsers(1, null).block(Utilities.IT_TIMEOUT));
     }
 
     @Test
     public void userTokenTest() throws Exception {
-        EMUser aliceUser = service.user().get(ALICE_USER_NAME).block(Duration.ofSeconds(REQUEST_TIMEOUT));
+        EMUser aliceUser = service.user().get(ALICE_USER_NAME).block(Utilities.IT_TIMEOUT);
         String aliceAgoraToken = service.token().generateUserToken(aliceUser, EXPIRE_IN_SECONDS,
             rtcPrivilegeAdder(DUMMY_CHANNEL_NAME, DUMMY_UID, DUMMY_RTC_PRIVILEGE, EXPIRE_IN_SECONDS)
-        ).block(Duration.ofSeconds(REQUEST_TIMEOUT)).getValue();
+        ).block(Utilities.IT_TIMEOUT).getValue();
 
         HttpClient clientWithAliceEasemobToken = exchangeForEasemobToken(aliceAgoraToken);
 
@@ -87,7 +86,7 @@ public class AgoraTokenIT {
                     .responseSingle((rsp, buf) -> service.getContext().getErrorMapper().apply(rsp)
                             .then(buf))
                     .map(buf -> service.getContext().getCodec().decode(buf, UserGetResponse.class))
-                    .block(Duration.ofSeconds(REQUEST_TIMEOUT))
+                    .block(Utilities.IT_TIMEOUT)
                     .getEMUser(BOB_USER_NAME);
             log.debug("bobUser = {}", bobUser.toString());
         });
@@ -99,7 +98,7 @@ public class AgoraTokenIT {
                     .responseSingle((rsp, buf) -> service.getContext().getErrorMapper().apply(rsp)
                             .then(buf))
                     .map(buf -> service.getContext().getCodec().decode(buf, UserGetResponse.class))
-                    .block(Duration.ofSeconds(REQUEST_TIMEOUT))
+                    .block(Utilities.IT_TIMEOUT)
                     .getEMUser(ALICE_USER_NAME);
             log.debug("aliceUser = {}", aliceUserFetchedWithHerToken.toString());
         });
