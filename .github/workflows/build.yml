@@ -22,6 +22,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
+      IM_HTTP_LOG_FORMAT: CONTENT
       IM_BASE_URI: http://a1-hsb.easemob.com
       IM_REALM: AGORA_REALM
       IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
