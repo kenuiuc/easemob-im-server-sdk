@@ -3,7 +3,6 @@ package com.easemob.im.server.api;
 import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.EMService;
 import com.easemob.im.server.api.token.agora.AccessToken2;
-import com.easemob.im.server.api.token.allocate.AgoraTokenProvider;
 import com.easemob.im.server.api.token.allocate.ExchangeTokenRequest;
 import com.easemob.im.server.api.user.get.UserGetResponse;
 import com.easemob.im.server.exception.EMUnauthorizedException;
@@ -17,12 +16,13 @@ import org.slf4j.LoggerFactory;
 import reactor.netty.http.client.HttpClient;
 import com.easemob.im.server.api.util.Utilities;
 
+import java.time.Duration;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import static com.easemob.im.server.api.util.Utilities.IT_TIMEOUT;
 import static com.easemob.im.server.api.util.Utilities.toExpireOnSeconds;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AgoraTokenIT {
@@ -31,9 +31,9 @@ public class AgoraTokenIT {
             AccessToken2.PrivilegeRtc.PRIVILEGE_JOIN_CHANNEL;
     private static final String DUMMY_CHANNEL_NAME = "dummyChannelName";
     private static final String DUMMY_UID = "dummyUID";
-    private static final int EXPIRE_IN_SECONDS = 600;
+    private static final int EXPIRE_IN_SECONDS = 3600;
 
-    private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(AgoraTokenIT.class);
     // this name must be yifan3 for now
     // TODO: dont hardcode names once easemobUserName -> agoraUserId mapping is ready
     private static final String ALICE_USER_NAME = "yifan3";
@@ -42,6 +42,7 @@ public class AgoraTokenIT {
     private final ExchangeTokenRequest exchangeTokenRequest = new ExchangeTokenRequest();
 
     protected EMService service;
+    private EMProperties properties;
 
     String realm = System.getenv("IM_REALM");
     String appkey = System.getenv("IM_APPKEY");
@@ -52,25 +53,39 @@ public class AgoraTokenIT {
     @BeforeAll
     public void init() {
         Assumptions.assumeTrue(EMProperties.Realm.AGORA_REALM.name().equals(realm));
-        EMProperties properties = EMProperties.builder()
+        properties = EMProperties.builder()
                 .setRealm(EMProperties.Realm.AGORA_REALM)
                 .setBaseUri(baseUri)
                 .setAppkey(appkey)
                 .setAppId(appId)
                 .setAppCert(appCert)
                 .build();
-        this.service = new EMService(properties);
-    }
-
-    // With an Easemob App Token you can GET all users
-    @Test
-    public void appTokenTest() {
-        assertDoesNotThrow(() -> this.service.user()
-                .listUsers(1, null).block(Utilities.IT_TIMEOUT));
     }
 
     @Test
-    public void userTokenTest() throws Exception {
+    public void userTokenTest() throws InterruptedException {
+        Random random = new Random();
+        int iterations = 60;
+        int successCount = 0;
+        int sleepSeconds = 10;
+        for (int i = 1; i <= iterations; i ++) {
+            Thread.sleep(Duration.ofSeconds(sleepSeconds).toMillis() + random.nextInt(1000));
+            this.service = new EMService(properties);
+            try {
+                log.info("[STARTING] test {}", i);
+                userToken();
+                log.info("[SUCCEEDED] test {}", i);
+                successCount ++;
+            } catch (Exception ex) {
+                log.error("[FAILED] test {}", i, ex);
+            }
+        }
+        log.info("[END] iterations = " + iterations);
+        log.info("[END] successCount = " + successCount);
+        assertEquals(iterations, successCount);
+    }
+
+    private void userToken() {
         EMUser aliceUser = service.user().get(ALICE_USER_NAME).block(Utilities.IT_TIMEOUT);
         String aliceAgoraToken = service.token().generateUserToken(aliceUser, EXPIRE_IN_SECONDS,
             rtcPrivilegeAdder(DUMMY_CHANNEL_NAME, DUMMY_UID, DUMMY_RTC_PRIVILEGE, EXPIRE_IN_SECONDS)

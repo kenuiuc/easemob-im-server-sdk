@@ -18,57 +18,6 @@ jobs:
         run: mvn --batch-mode -Pci clean package
       - name: CodeCov
         uses: codecov/codecov-action@v1
-  IT-ebs:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      IM_APPKEY: ${{ secrets.IM_APPKEY_EBS }}
-      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_EBS }}
-      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_EBS }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Maven
-        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
-  IT-sandbox-default:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      IM_BASE_URI: http://a1-hsb.easemob.com
-      IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
-      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_SANDBOX }}
-      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_SANDBOX }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Maven
-        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
-  IT-sandbox-easemob-realm:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      IM_BASE_URI: http://a1-hsb.easemob.com
-      IM_REALM: EASEMOB_REALM
-      IM_APPKEY: ${{ secrets.IM_APPKEY_SANDBOX }}
-      IM_CLIENT_ID: ${{ secrets.IM_CLIENT_ID_SANDBOX }}
-      IM_CLIENT_SECRET: ${{ secrets.IM_CLIENT_SECRET_SANDBOX }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Maven
-        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
   IT-sandbox-agora-realm:
     needs: build
     runs-on: ubuntu-latest
@@ -86,5 +35,5 @@ jobs:
         with:
           java-version: 1.8
       - name: Maven
-        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="*IT" -D failIfNoTests=false
+        run: mvn -pl im-sdk-core --batch-mode -Pci clean test -D test="AgoraTokenIT" -D failIfNoTests=false
 
