@@ -14,7 +14,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class GroupIT extends AbstractIT {
 
@@ -24,10 +23,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupCreatePublic() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -55,10 +54,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupCreatePrivate() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -85,10 +84,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupDestroy() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -110,10 +109,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListAllGroups() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -135,10 +134,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListGroups() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -160,10 +159,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGet() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -185,10 +184,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdate() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -217,10 +216,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdateOwner() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -249,10 +248,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetAnnouncement() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -274,10 +273,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUpdateAnnouncement() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -307,10 +306,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListAllGroupMembers() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -332,10 +331,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupListMembers() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -368,10 +367,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupAddMember() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
@@ -405,10 +404,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupRemoveMember() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -440,11 +439,11 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupAddAdmin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomAdminUsername = makeRandomUserName();
-        String randomMemberUsername = makeRandomUserName();
+        String randomAdminUsername = Utilities.randomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         members.add(randomAdminUsername);
@@ -478,11 +477,11 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupRemoveAdmin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomAdminUsername = makeRandomUserName();
-        String randomMemberUsername = makeRandomUserName();
+        String randomAdminUsername = Utilities.randomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         members.add(randomAdminUsername);
@@ -517,10 +516,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetUsersBlockedJoin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -551,10 +550,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupBlockUserJoin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -607,10 +606,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUnblockUserJoin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -657,10 +656,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupGetUsersBlockedSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -697,10 +696,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupBlockUserSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -737,10 +736,10 @@ public class GroupIT extends AbstractIT {
 
     @Test
     void testGroupUnblockUserSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 class UserIT extends AbstractIT {
 
@@ -18,8 +17,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserLifeCycles() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(
@@ -32,8 +31,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserForceLogout() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().forceLogoutAllDevices(randomUsername)
@@ -44,8 +43,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserUpdatePassword() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().updateUserPassword(randomUsername, "password")
@@ -56,8 +55,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserListUsers() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(
@@ -70,8 +69,8 @@ class UserIT extends AbstractIT {
     // currently we use easemob-demo#easechatui for the gateway token007 tests and this appkey has too many users
     @Disabled
     void testUserListAll() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         String username = assertDoesNotThrow(
@@ -86,10 +85,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserContactAdd() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomContactUsername = makeRandomUserName();
+        String randomContactUsername = Utilities.randomUserName();
         String randomContactPassword = randomContactUsername;
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
@@ -113,10 +112,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserContactRemove() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomContactUsername = makeRandomUserName();
+        String randomContactUsername = Utilities.randomUserName();
         String randomContactPassword = randomContactUsername;
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
@@ -142,10 +141,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserContactList() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = makeRandomUserName();
+        String randomUsernameCodeJack = Utilities.randomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
@@ -172,10 +171,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserGetUsersBlockedFromSendMsg() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = makeRandomUserName();
+        String randomUsernameCodeJack = Utilities.randomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
@@ -200,10 +199,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserBlockUserSendMsg() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = makeRandomUserName();
+        String randomUsernameCodeJack = Utilities.randomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
@@ -238,10 +237,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserUnblockUserSendMsg() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = makeRandomUserName();
+        String randomUsernameCodeJack = Utilities.randomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
@@ -276,10 +275,10 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserCountMissedMessages() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = makeRandomUserName();
+        String randomUsernameCodeJack = Utilities.randomUserName();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
@@ -302,8 +301,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserBlockLogin() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.block().blockUserLogin(randomUsername)
@@ -314,8 +313,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserUnblockLogin() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.block().blockUserLogin(randomUsername)
@@ -328,8 +327,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserOnlineStatus() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         boolean isOnline = assertDoesNotThrow(() -> this.service.user().isUserOnline(randomUsername)
@@ -343,8 +342,8 @@ class UserIT extends AbstractIT {
 
     @Test
     void testGetUserToken() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(
                 () -> this.service.user().create(randomUsername, randomPassword).block());
         // TODO: doc this confusion -> but this one should be working for both Realms

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class RoomIT extends AbstractIT {
 
@@ -20,10 +19,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomCreate() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -43,10 +42,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomGet() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -67,10 +66,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUpdate() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -93,10 +92,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomListAll() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -118,10 +117,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomListRooms() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -143,10 +142,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUserJoinedList() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -168,10 +167,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomMembersAll() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -193,10 +192,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomMembers() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -218,10 +217,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomAddMember() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
@@ -242,10 +241,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomRemoveMember() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -267,10 +266,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomAdminsAll() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -294,10 +293,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomPromoteAdmin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -319,10 +318,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDemoteAdmin() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -346,8 +345,8 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomSuperAdminsAll() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.room().promoteRoomSuperAdmin(randomUsername)
@@ -360,8 +359,8 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomPromoteSuperAdmin() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.room().promoteRoomSuperAdmin(randomUsername)
@@ -372,8 +371,8 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDemoteSuperAdmin() {
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.room().demoteRoomSuperAdmin(randomUsername)
@@ -384,10 +383,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomDestroy() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -407,10 +406,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUsersBlockedSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -435,10 +434,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomBlockUserSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)
@@ -473,10 +472,10 @@ public class RoomIT extends AbstractIT {
 
     @Test
     void testRoomUnblockUserSendMsg() {
-        String randomOwnerUsername = makeRandomUserName();
-        String randomPassword = randomOwnerUsername;
+        String randomOwnerUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
 
-        String randomMemberUsername = makeRandomUserName();
+        String randomMemberUsername = Utilities.randomUserName();
         List<String> members = new ArrayList<>();
         members.add(randomMemberUsername);
         assertDoesNotThrow(() -> this.service.user().create(randomOwnerUsername, randomPassword)

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static com.easemob.im.server.utils.RandomMaker.makeRandomUserName;
 
 public class MetadataIT extends AbstractIT {
     public MetadataIT() {
@@ -23,8 +22,8 @@ public class MetadataIT extends AbstractIT {
         map.put("avatar", "http://www.easemob.com/avatar.png");
         map.put("phone", "159");
 
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.metadata().setMetadataToUser(randomUsername, map)
@@ -40,8 +39,8 @@ public class MetadataIT extends AbstractIT {
         map.put("avatar", "http://www.easemob.com/avatar.png");
         map.put("phone", "159");
 
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.metadata().setMetadataToUser(randomUsername, map)
@@ -64,8 +63,8 @@ public class MetadataIT extends AbstractIT {
         map.put("avatar", "http://www.easemob.com/avatar.png");
         map.put("phone", "159");
 
-        String randomUsername = makeRandomUserName();
-        String randomPassword = randomUsername;
+        String randomUsername = Utilities.randomUserName();
+        String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
         assertDoesNotThrow(() -> this.service.metadata().setMetadataToUser(randomUsername, map)
