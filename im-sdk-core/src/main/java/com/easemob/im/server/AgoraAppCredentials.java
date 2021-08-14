@@ -1,5 +1,6 @@
 package com.easemob.im.server;
 
+import com.easemob.im.server.api.util.Utilities;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
 import org.apache.logging.log4j.util.Strings;
 
@@ -32,4 +33,11 @@ public class AgoraAppCredentials implements Credentials {
         return appCert;
     }
 
+    @Override public String toString() {
+        return "AgoraAppCredentials{" +
+                "appKey='" + appKey + '\'' +
+                ", appId='" + Utilities.mask(appId) + '\'' +
+                ", appCert='" + Utilities.mask(appCert) + '\'' +
+                '}';
+    }
 }

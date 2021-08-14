@@ -2,7 +2,6 @@ package com.easemob.im.server.api.metadata;
 
 import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.api.Context;
-import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.exception.EMForbiddenException;
 import com.easemob.im.server.exception.EMInvalidStateException;
@@ -10,12 +9,12 @@ import com.easemob.im.server.model.EMUser;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Map;
 import java.util.function.Consumer;
 
+// TODO: need tests UT/IT
 public class TokenApi {
 
     private static final String ERROR_MSG = "failed to build AccessToken2";
@@ -27,21 +26,11 @@ public class TokenApi {
         this.context = context;
     }
 
-    public Mono<Token> generateUserToken(EMUser user, int expireInSeconds, Consumer<AccessToken2> tokenConfigurer) {
+    public String generateUserToken(EMUser user, int expireInSeconds, Consumer<AccessToken2> tokenConfigurer) {
         String userId = user.getUuid();
         EMProperties properties = context.getProperties();
-        String token2Value = buildUserCustomizedToken(properties.getAppId(), properties.getAppCert(),
-                userId, expireInSeconds, tokenConfigurer);
-        final Instant expireAt = Instant.now().plusSeconds(expireInSeconds);
-        return Mono.just(new Token(token2Value, expireAt));
-    }
-
-    private static int toExpireOnSeconds(int expireInSeconds) {
-        return (int) (Instant.now().plusSeconds(expireInSeconds).toEpochMilli() / 1000);
-    }
-
-    private String buildUserCustomizedToken(String appId, String appCert, String userId,
-            int expireInSeconds, Consumer<AccessToken2> tokenConfigurer) {
+        String appId = properties.getAppId();
+        String appCert = properties.getAppCert();
         int expireOnSeconds = toExpireOnSeconds(expireInSeconds);
 
         AccessToken2 accessToken = new AccessToken2(appId, appCert, expireOnSeconds);
@@ -58,6 +47,10 @@ public class TokenApi {
             log.error(ERROR_MSG, e);
             throw new EMInvalidStateException(ERROR_MSG);
         }
+    }
+
+    private static int toExpireOnSeconds(int expireInSeconds) {
+        return (int) (Instant.now().plusSeconds(expireInSeconds).toEpochMilli() / 1000);
     }
 
     // must include userId if it has the chat.user privilege

@@ -1,5 +1,6 @@
 package com.easemob.im.server;
 
+import com.easemob.im.server.api.util.Utilities;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
 import com.easemob.im.server.exception.EMInvalidStateException;
 import com.easemob.im.server.exception.EMUnsupportedEncodingException;
@@ -37,6 +38,7 @@ public class EMProperties {
     }
 
     @Deprecated
+    // TODO: And, we need to inform developers what to use instead, and why.
     public EMProperties(String baseUri, String appKey, EMProxy proxy, String clientId,
             String clientSecret, int httpConnectionPoolSize, String serverTimezone) {
         this.realm = Realm.EASEMOB_REALM;
@@ -232,5 +234,31 @@ public class EMProperties {
                 throw new EMInvalidStateException(String.format("invalid realm type %s", this.realm.name()));
             }
         }
+
+        @Override public String toString() {
+            return "Builder{" +
+                    "realm=" + realm +
+                    ", appKey='" + appKey + '\'' +
+                    ", clientId='" + Utilities.mask(clientId) + '\'' +
+                    ", clientSecret='" + Utilities.mask(clientSecret) + '\'' +
+                    ", appId='" + Utilities.mask(appId) + '\'' +
+                    ", appCert='" + Utilities.mask(appCert) + '\'' +
+                    ", baseUri='" + baseUri + '\'' +
+                    ", proxy=" + proxy +
+                    ", httpConnectionPoolSize=" + httpConnectionPoolSize +
+                    ", serverTimezone='" + serverTimezone + '\'' +
+                    '}';
+        }
+    }
+
+    @Override public String toString() {
+        return "EMProperties{" +
+                "realm=" + realm +
+                ", credentials=" + credentials +
+                ", baseUri='" + baseUri + '\'' +
+                ", proxy=" + proxy +
+                ", httpConnectionPoolSize=" + httpConnectionPoolSize +
+                ", serverTimezone='" + serverTimezone + '\'' +
+                '}';
     }
 }

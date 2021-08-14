@@ -1,5 +1,6 @@
 package com.easemob.im.server;
 
+import com.easemob.im.server.api.util.Utilities;
 import com.easemob.im.server.exception.EMInvalidArgumentException;
 import org.apache.logging.log4j.util.Strings;
 
@@ -30,5 +31,13 @@ public class EasemobAppCredentials implements Credentials {
     @Override
     public String getClientSecret() {
         return clientSecret;
+    }
+
+    @Override public String toString() {
+        return "EasemobAppCredentials{" +
+                "appKey='" + appKey + '\'' +
+                ", clientId='" + Utilities.mask(clientId) + '\'' +
+                ", clientSecret='" +Utilities.mask(clientSecret) + '\'' +
+                '}';
     }
 }

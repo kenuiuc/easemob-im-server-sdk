@@ -75,7 +75,7 @@ public class AgoraTokenIT {
         EMUser aliceUser = service.user().get(ALICE_USER_NAME).block(Utilities.IT_TIMEOUT);
         String aliceAgoraToken = service.token().generateUserToken(aliceUser, EXPIRE_IN_SECONDS,
             rtcPrivilegeAdder(DUMMY_CHANNEL_NAME, DUMMY_UID, DUMMY_RTC_PRIVILEGE, EXPIRE_IN_SECONDS)
-        ).block(Utilities.IT_TIMEOUT).getValue();
+        );
 
         HttpClient clientWithAliceEasemobToken = exchangeForEasemobToken(aliceAgoraToken);
 

@@ -66,9 +66,7 @@ public class AgoraTokenProvider implements TokenProvider {
                 .flatMap(endpoint -> this.httpClient
                         .baseUrl(String.format("%s/%s/token", endpoint.getUri(),
                                 this.properties.getAppkeySlashDelimited()))
-                        .headersWhen(headers -> Mono.fromCallable(() -> buildAppToken(appId, appCert))
-                                .map(token -> headers
-                                        .set("Authorization", String.format("Bearer %s", token))))
+                        .headers(headers -> headers.set("Authorization", String.format("Bearer %s", buildAppToken(appId, appCert))))
                         .post()
                         .send(Mono.create(sink -> sink
                                 .success(this.codec.encode(exchangeTokenRequest))))
