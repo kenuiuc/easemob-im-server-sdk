@@ -141,31 +141,31 @@ class UserIT extends AbstractIT {
 
     @Test
     void testUserContactList() {
-        String randomUsername = Utilities.randomUserName();
+        // add bob to alice's contact list
+        String aliceUserName = Utilities.randomUserName();
+        String bobUserName = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
 
-        String randomUsernameCodeJack = Utilities.randomUserName();
-        assertDoesNotThrow(() -> this.service.user().create(randomUsername, randomPassword)
+        assertDoesNotThrow(() -> this.service.user().create(aliceUserName, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
-        assertDoesNotThrow(() -> this.service.user().create(randomUsernameCodeJack, randomPassword)
+        assertDoesNotThrow(() -> this.service.user().create(bobUserName, randomPassword)
                 .block(Utilities.IT_TIMEOUT));
 
-        assertDoesNotThrow(() -> this.service.contact().add(randomUsername, randomUsernameCodeJack)
+        assertDoesNotThrow(() -> this.service.contact().add(aliceUserName, bobUserName)
                 .block(Utilities.IT_TIMEOUT));
-        String username = assertDoesNotThrow(() -> this.service.contact().list(randomUsername))
+        String aliceFirstFriend = assertDoesNotThrow(() -> this.service.contact().list(aliceUserName))
                 .blockFirst(Utilities.IT_TIMEOUT);
-        if (username == null) {
-            throw new RuntimeException(String.format("%s contact list is null", randomUsername));
+        if (aliceFirstFriend == null) {
+            throw new RuntimeException(String.format("%s contact list is null", aliceUserName));
         }
 
-        if (!username.equals(randomUsernameCodeJack)) {
-            throw new RuntimeException(
-                    String.format("%s did not found %s in his contact list", randomUsername,
-                            randomUsernameCodeJack));
+        if (!aliceFirstFriend.equals(bobUserName)) {
+            throw new RuntimeException(String.format("%s did not found %s in his contact list",
+                    aliceUserName, bobUserName));
         }
         assertDoesNotThrow(
-                () -> this.service.user().delete(randomUsername).block(Utilities.IT_TIMEOUT));
-        assertDoesNotThrow(() -> this.service.user().delete(randomUsernameCodeJack)
+                () -> this.service.user().delete(aliceUserName).block(Utilities.IT_TIMEOUT));
+        assertDoesNotThrow(() -> this.service.user().delete(bobUserName)
                 .block(Utilities.IT_TIMEOUT));
     }
 
@@ -345,9 +345,9 @@ class UserIT extends AbstractIT {
         String randomUsername = Utilities.randomUserName();
         String randomPassword = Utilities.randomPassword();
         assertDoesNotThrow(
-                () -> this.service.user().create(randomUsername, randomPassword).block());
+                () -> this.service.user().create(randomUsername, randomPassword).block(Utilities.IT_TIMEOUT));
         // TODO: doc this confusion -> but this one should be working for both Realms
-        assertDoesNotThrow(() -> this.service.user().getToken(randomUsername, randomPassword).block());
+        assertDoesNotThrow(() -> this.service.user().getToken(randomUsername, randomPassword).block(Utilities.IT_TIMEOUT));
     }
 
 }

@@ -3,12 +3,11 @@ package com.easemob.im.server.api.historymsg;
 import com.easemob.im.server.api.AbstractIT;
 import com.easemob.im.server.api.util.Utilities;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -18,17 +17,17 @@ public class HistoryMsgIT extends AbstractIT {
         super();
     }
 
-    // TODO: test failed and need to look into this
+    // TODO: disable them for now since msg history can be empty
     @Disabled
     void testHistoryMsgGetAsUri() {
-        this.service.message().getHistoryAsUri(
-                Instant.now().minusMillis(TimeUnit.HOURS.toMillis(8))).block();
+        // minus 2 hours since msg history has an at least one hour delay
+        this.service.message().getHistoryAsUri(Instant.now().minus(Duration.ofHours(2))).block(Utilities.IT_TIMEOUT);
     }
 
     @Disabled
     void testHistoryMsgGetAsLocalFile() {
         Path path = FileSystems.getDefault().getPath("path");
-        assertDoesNotThrow(() -> this.service.message().getHistoryAsLocalFile(Instant.ofEpochSecond(1616407200),
+        assertDoesNotThrow(() -> this.service.message().getHistoryAsLocalFile(Instant.now().minus(Duration.ofHours(2)),
                 path, "history.gz").block(Utilities.IT_TIMEOUT));
     }
 

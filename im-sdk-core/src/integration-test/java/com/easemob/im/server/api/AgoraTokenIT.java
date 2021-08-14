@@ -91,7 +91,7 @@ public class AgoraTokenIT {
             log.debug("bobUser = {}", bobUser.toString());
         });
 
-        // With an Easemob User Token you are able to GET the same user
+        // With an Easemob User Token you are able to GET the token owner
         assertDoesNotThrow(() -> {
             EMUser aliceUserFetchedWithHerToken = clientWithAliceEasemobToken
                     .get().uri(String.format("/users/%s", ALICE_USER_NAME))
