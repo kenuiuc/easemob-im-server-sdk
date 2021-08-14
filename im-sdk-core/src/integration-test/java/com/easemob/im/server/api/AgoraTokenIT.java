@@ -5,7 +5,6 @@ import com.easemob.im.server.EMService;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.api.token.allocate.AgoraTokenProvider;
 import com.easemob.im.server.api.token.allocate.ExchangeTokenRequest;
-import com.easemob.im.server.api.token.allocate.TokenResponse;
 import com.easemob.im.server.api.user.get.UserGetResponse;
 import com.easemob.im.server.exception.EMUnauthorizedException;
 import com.easemob.im.server.model.EMUser;
@@ -15,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import com.easemob.im.server.api.util.Utilities;
 
 import java.util.function.Consumer;
 
+import static com.easemob.im.server.api.util.Utilities.IT_TIMEOUT;
 import static com.easemob.im.server.api.util.Utilities.toExpireOnSeconds;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,7 +76,7 @@ public class AgoraTokenIT {
             rtcPrivilegeAdder(DUMMY_CHANNEL_NAME, DUMMY_UID, DUMMY_RTC_PRIVILEGE, EXPIRE_IN_SECONDS)
         );
 
-        HttpClient clientWithAliceEasemobToken = exchangeForEasemobToken(aliceAgoraToken);
+        HttpClient clientWithAliceEasemobToken = getClientWithEasemobHeader(aliceAgoraToken);
 
         // With an Easemob User Token you are not authorized to GET another user
         assertThrows(EMUnauthorizedException.class, () -> {
@@ -104,25 +103,17 @@ public class AgoraTokenIT {
         });
     }
 
-    private HttpClient exchangeForEasemobToken(String agoraToken) {
+    private HttpClient getClientWithEasemobHeader(String agoraToken) {
         Context context = service.getContext();
+        Codec codec = context.getCodec();
+        ErrorMapper errorMapper = context.getErrorMapper();
         HttpClient httpClient = EMHttpClientFactory.create(context.getProperties());
-        String baseUrl =
-                String.format("%s/%s", baseUri, context.getProperties().getAppkeySlashDelimited());
-        HttpClient aliceAgoraTokenClient = httpClient.baseUrl(baseUrl).headers(
-                headers -> headers.set("Authorization", String.format("Bearer %s", agoraToken)));
-        String easemobToken = aliceAgoraTokenClient
-                .post().uri("/token")
-                .send(Mono.create(sink -> sink
-                        .success(context.getCodec().encode(exchangeTokenRequest))))
-                .responseSingle((rsp, buf) -> context.getErrorMapper().apply(rsp).then(buf))
-                .map(buf -> context.getCodec().decode(buf, TokenResponse.class))
-                .map(TokenResponse::asToken).block().getValue();
-
+        String baseUrl = String.format("%s/%s", baseUri, context.getProperties().getAppkeySlashDelimited());
+        String easemobToken = AgoraTokenProvider.exchangeForEasemobToken(httpClient, baseUrl, agoraToken, codec, errorMapper)
+                .block(IT_TIMEOUT).getValue();
         return EMHttpClientFactory.create(context.getProperties()).baseUrl(baseUrl)
                 .headers(headers -> headers.set("Authorization", String.format("Bearer %s", easemobToken)));
     }
-
 
     // TODO: should be an sample
     private  Consumer<AccessToken2> rtcPrivilegeAdder(

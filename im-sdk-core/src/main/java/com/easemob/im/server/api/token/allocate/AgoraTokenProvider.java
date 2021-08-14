@@ -23,11 +23,9 @@ public class AgoraTokenProvider implements TokenProvider {
 
     private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
     private static final String EXPIRE_IN_SECONDS_STRING = System.getenv("IM_TOKEN_EXPIRE_IN_SECONDS");
-    // Both of token and chat privilege expire in an hour by default
+    // Both token and chat privilege will expire in an hour by default
     private static final int EXPIRE_IN_SECONDS = Strings.isNotBlank(EXPIRE_IN_SECONDS_STRING) ?
             Integer.parseInt(EXPIRE_IN_SECONDS_STRING) : 3600;
-
-    private final ExchangeTokenRequest exchangeTokenRequest = new ExchangeTokenRequest();
 
     private final EMProperties properties;
 
@@ -65,19 +63,29 @@ public class AgoraTokenProvider implements TokenProvider {
     }
 
     private Mono<Token> fetchEasemobToken(String appId, String appCert) {
-        return endpointRegistry.endpoints()
-                .map(this.loadBalancer::loadBalance)
-                .flatMap(endpoint -> this.httpClient
-                        .baseUrl(String.format("%s/%s/token", endpoint.getUri(),
-                                this.properties.getAppkeySlashDelimited()))
-                        .headers(headers -> headers.set("Authorization", String.format("Bearer %s", buildAppToken(appId, appCert))))
-                        .post()
-                        .send(Mono.create(sink -> sink
-                                .success(this.codec.encode(exchangeTokenRequest))))
-                        .responseSingle((rsp, buf) -> this.errorMapper.apply(rsp).then(buf)))
-                .map(buf -> this.codec.decode(buf, TokenResponse.class))
+        String agoraChatAppToken = buildAppToken(appId, appCert);
+        return endpointRegistry.endpoints().map(this.loadBalancer::loadBalance)
+            .flatMap(endpoint ->
+                exchangeForEasemobToken(
+                    this.httpClient,
+                    String.format("%s/%s", endpoint.getUri(), this.properties.getAppkeySlashDelimited()),
+                    agoraChatAppToken, this.codec, this.errorMapper
+                )
+            );
+    }
+
+    public static Mono<Token> exchangeForEasemobToken(HttpClient httpClient, String baseUrl, String agoraToken,
+            Codec codec, ErrorMapper errorMapper) {
+        return httpClient.baseUrl(baseUrl)
+                .headers(headers -> headers.set("Authorization", String.format("Bearer %s", agoraToken)))
+                .post().uri("/token")
+                .send(Mono.create(sink -> sink
+                        .success(codec.encode(ExchangeTokenRequest.getInstance()))))
+                .responseSingle((rsp, buf) -> errorMapper.apply(rsp).then(buf))
+                .map(buf -> codec.decode(buf, TokenResponse.class))
                 .map(TokenResponse::asToken);
     }
+
 
     private String buildAppToken(String appId, String appCert) {
         int expireOnSeconds = toExpireOnSeconds(EXPIRE_IN_SECONDS);
