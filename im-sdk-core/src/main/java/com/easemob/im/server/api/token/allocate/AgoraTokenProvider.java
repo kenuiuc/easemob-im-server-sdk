@@ -8,6 +8,7 @@ import com.easemob.im.server.api.loadbalance.LoadBalancer;
 import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.exception.EMInvalidStateException;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -21,7 +22,10 @@ import static com.easemob.im.server.api.util.Utilities.toExpireOnSeconds;
 public class AgoraTokenProvider implements TokenProvider {
 
     private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
-    private static final int EXPIRE_IN_SECONDS = 3600;
+    private static final String EXPIRE_IN_SECONDS_STRING = System.getenv("IM_TOKEN_EXPIRE_IN_SECONDS");
+    // Both of token and chat privilege expire in an hour by default
+    private static final int EXPIRE_IN_SECONDS = Strings.isNotBlank(EXPIRE_IN_SECONDS_STRING) ?
+            Integer.parseInt(EXPIRE_IN_SECONDS_STRING) : 3600;
 
     private final ExchangeTokenRequest exchangeTokenRequest = new ExchangeTokenRequest();
 
