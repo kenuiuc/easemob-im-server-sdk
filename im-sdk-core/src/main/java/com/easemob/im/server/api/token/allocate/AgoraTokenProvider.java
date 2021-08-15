@@ -82,8 +82,8 @@ public class AgoraTokenProvider implements TokenProvider {
                 .send(Mono.create(sink -> sink
                         .success(codec.encode(ExchangeTokenRequest.getInstance()))))
                 .responseSingle((rsp, buf) -> errorMapper.apply(rsp).then(buf))
-                .map(buf -> codec.decode(buf, TokenResponse.class))
-                .map(TokenResponse::asToken);
+                .map(buf -> codec.decode(buf, ExchangeTokenResponse.class))
+                .map(ExchangeTokenResponse::asToken);
     }
 
 
