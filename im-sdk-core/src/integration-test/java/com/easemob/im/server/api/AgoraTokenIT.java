@@ -3,6 +3,7 @@ package com.easemob.im.server.api;
 import com.easemob.im.server.EMProperties;
 import com.easemob.im.server.EMService;
 import com.easemob.im.server.api.token.agora.AccessToken2;
+import com.easemob.im.server.api.token.allocate.AgoraTokenProvider;
 import com.easemob.im.server.api.token.allocate.ExchangeTokenRequest;
 import com.easemob.im.server.api.user.get.UserGetResponse;
 import com.easemob.im.server.exception.EMUnauthorizedException;
@@ -124,7 +125,8 @@ public class AgoraTokenIT {
         ErrorMapper errorMapper = context.getErrorMapper();
         HttpClient httpClient = EMHttpClientFactory.create(context.getProperties());
         String baseUrl = String.format("%s/%s", baseUri, context.getProperties().getAppkeySlashDelimited());
-        String easemobToken = AgoraTokenProvider.exchangeForEasemobToken(httpClient, baseUrl, agoraToken, codec, errorMapper)
+        String easemobToken = AgoraTokenProvider
+                .exchangeForEasemobToken(httpClient, baseUrl, agoraToken, codec, errorMapper)
                 .block(IT_TIMEOUT).getValue();
         return EMHttpClientFactory.create(context.getProperties()).baseUrl(baseUrl)
                 .headers(headers -> headers.set("Authorization", String.format("Bearer %s", easemobToken)));
