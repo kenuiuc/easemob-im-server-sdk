@@ -1,31 +1,14 @@
-# 使用 AppServer 实现用户注册和登录
-
-
+# 使用 Server SDK 获取用户 token
 
 注册环信开发者账户后，您需要为您的应用内用户创建环信用户 ID 并与您的应用内用户 ID 一一对应，这样用户在 App 端登陆后获取 token 使用 IM 服务。
 
-AppServer 为开发者演示了在用户注册、用户登录时，如何为用户创建环信 ID与环信关联以及为用户获取 token。
-
-
-
 ## **技术原理**
-
-
-
-
-
-![DC4314DA-FDF0-408D-B9C3-B666775CC246](https://user-images.githubusercontent.com/15087647/128315691-b69ad985-0642-4041-9361-af119c1480f3.png)
----
-![40A2C15E-3F4E-4141-BD76-F4CC3DF91276](https://user-images.githubusercontent.com/15087647/128316482-bcc2b30c-6dbd-4712-a9a1-b6da1d98036d.png)
----
 
 ### 
 
-- AppServer 在用户注册时通过 Server SDK 为用户创建环信用户与环信关联，同时会为用户生成一个 agoraUid，是为了使用[声网服务](https://docs.agora.io/cn/Voice/landing-page)准备的。
-- AppServer 在用户登录后，通过 Server SDK 利用声网 appId、声网 appCert、环信用户 uuid 为用户生成 token。
-- AppServer 通过数据库存储用户信息，用户信息包括用户账号、用户密码、环信用户名、环信用户 uuid、agoraUid。
-
-
+- 开发者在用户注时候可以通过 Server SDK 为用户创建环信用户与环信关联.
+- 注册环信用户需要提供用户名和密码，环信后端会为每用户生成一个 UUID.
+- 开发者可以通过 Server SDK 利用声网 appId、声网 appCert、环信用户 UUID 为用户生成 token.
 
 ## 实现步骤
 
@@ -95,110 +78,7 @@ AppServer 为开发者演示了在用户注册、用户登录时，如何为用�
 
 
 
-
-
-### 技术选择
-
-* [Spring Boot](https://spring.io/projects/spring-boot)
-* [Spring Security](https://spring.io/projects/spring-security#overview)
-
-### 主要组件
-
-* [Server SDK](https://github.com/easemob/easemob-im-server-sdk)
-* Redis
-* MySQL
-
-
-
-
-
 ## API 参考
 
-### 用户注册。
-在您的应用中为用户注册一个账号，此api 示例中使用的是用户名、密码的形式，当然您可以使用手机号等其他形式为用户注册一个账号。
-
-**Path:** `http://localhost:8080/app/user/register`
-
-**HTTP Method:** `POST`
-
-**Request Headers:** 
-
-| 参数 | 说明  |
-| --- | --- |
-| Content-Type  | application/json |
-
-**Request Body示例:** 
-{"userAccount":"jack", "userPassword":"123"}
-
-**Request Body参数说明:** 
-| 参数 | 类型 | 说明  |
-| --- | --- | --- |
-| userAccount | String | 用户账号|
-| userPassword | String | 用户密码 |
-
-
-**请求示例:**
-
-```
-curl -X POST -H 'Content-Type: application/json' 'http://localhost:8080/app/user/register' -d '{"userAccount": "jack","userPassword":"123"}'
-```
-
-**Response Parameters:**
-
-| 参数 | 类型 | 说明  |
-| --- | --- | --- |
-| code | String | 结果状态码 |
-| easemobUserName | String | 环信用户名|
-| agoraUid | Integer | 声网uid |
-
-**返回示例:**
-
-```json
-{
-    "code": "RES_OK",
-    "easemobUserName": "em1792190072",
-    "agoraUid": "1792190072"
-}
-```
-
----
-
-### 用户登录。
-用户在您应用上登录并获取一个token，利用此token在app端使用环信服务。
-
-**Path:** `http://localhost:8080/app/user/login/{userAccount}`
-
-需要在请求时对应填写{userAccount}，需要登录的用户账号。
-
-**HTTP Method:** `POST`
-
-**请求示例:**
-
-```
-curl -X POST 'http://localhost:8080/app/user/login/jack'
-```
-
-**Response Parameters:**
-
-| 参数 | 类型 | 说明  |
-| --- | --- | --- |
-| code | String | 结果状态码 |
-| accessToken | String | token |
-| expireTimestamp | Long | token的过期时间 |
-| easemobUserName | String | 环信用户名|
-| agoraUid | Integer | 声网uid |
-
-**返回示例:**
-
-```json
-{
-    "code": "RES_OK",
-    "accessToken": "xxx",
-    "expireTimestamp": 1628245967857,
-    "easemobUserName": "em1792190072",
-    "agoraUid": "1792190072"
-}
-```
-
-## Server SDK
-后面加生成token接口相关的文档介绍。
+## 用户注册。
+TODO:
