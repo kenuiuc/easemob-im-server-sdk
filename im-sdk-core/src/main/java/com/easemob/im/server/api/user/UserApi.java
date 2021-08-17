@@ -2,9 +2,6 @@ package com.easemob.im.server.api.user;
 
 import com.easemob.im.server.api.Context;
 import com.easemob.im.server.api.token.Token;
-import com.easemob.im.server.api.token.agora.AccessToken2;
-import com.easemob.im.server.api.token.allocate.TokenRequest;
-import com.easemob.im.server.api.token.allocate.TokenResponse;
 import com.easemob.im.server.api.token.allocate.UserTokenRequest;
 import com.easemob.im.server.api.user.create.CreateUser;
 import com.easemob.im.server.api.user.forcelogout.ForceLogoutUser;
