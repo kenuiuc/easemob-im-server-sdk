@@ -45,13 +45,13 @@ public class TokenApi {
      * 为用户 Cat 获取 Easemob userToken
      * <pre><code>
      * EMUser cat = new EMUser("cat", "da920000-ecf9-11eb-9af3-296ff79acb67", true);
-     * String catEasemobToken = this.getUserToken(cat, null, null, "passwordOfUserCat");
+     * String catEasemobToken = service.token().getUserToken(cat, null, null, "passwordOfUserCat");
      * </code></pre>
      * <p>
      * 为用户 Alice 生成仅含 AgoraChat 权限的 Agora userToken, 有效期为3600秒:
      * <pre><code>
      * EMUser alice = new EMUser("alice", "da920000-ecf9-11eb-9af3-296ff79acb67", true);
-     * String aliceAgoraChatToken = this.getUserToken(alice, 3600, null, null);
+     * String aliceAgoraChatToken = service.token().getUserToken(alice, 3600, null, null);
      * </code></pre>
      * <p>
      * 为用户 Bob 生成包含 AgoraChat 权限和 AgoraRTC (JOIN_CHANNEL) 权限的 Agora userToken, 有效期为600秒:
@@ -61,7 +61,7 @@ public class TokenApi {
      * int expireInSeconds = 600;
      * int expireOnSeconds = Utilities.toExpireOnSeconds(expireInSeconds);
      * EMUser bob = new EMUser("bob", "da921111-ecf9-11eb-9af3-296ff79acb67", true);
-     * String bobAgoraChatRtcToken = this.getUserToken(bob, expireInSeconds, token -> {
+     * String bobAgoraChatRtcToken = service.token().getUserToken(bob, expireInSeconds, token -&gt; {
      *     AccessToken2.ServiceRtc serviceRtc = new AccessToken2.ServiceRtc("dummyRtcChannelName", "dummyUid");
      *     serviceRtc.addPrivilegeRtc(AccessToken2.PrivilegeRtc.PRIVILEGE_JOIN_CHANNEL, expireOnSeconds);
      *     token.addService(serviceRtc);
