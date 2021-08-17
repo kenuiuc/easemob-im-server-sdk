@@ -37,7 +37,7 @@ public class TokenApi {
      * <p>
      * 可获取 Easemob userToken 或 Agora userToken. 如您初始化 service 时使用的是 Agora App Credentials,
      * 则两种 userToken 都可以获取. 如您初始化 service 时使用的是 Easemob App Credentials, 则只能获取 Easemob userToken.
-     * 其中 Agora userToken 的结构请参考 {@code AccessToken2}
+     * 其中 Agora userToken 的结构请参考 {@link AccessToken2}
      * <p>
      * Agora userToken 中除了 AgoraChat 权限以外, 还可以自定义添加其他 Agora 服务(比如RTC)的权限,
      * 对每个服务的权限可以单独设置不同的过期时间.

@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.easemob.im.server.api.metadata.TokenApi.fetchUserTokenWithEasemobRealm;
 
@@ -185,8 +186,9 @@ public class UserApi {
      * @param username 要获取token的用户名
      * @param password 要获取token的用户名密码
      * @return 返回token或失败
+     * @deprecated use {@link com.easemob.im.server.api.metadata.TokenApi#getUserToken(EMUser, Integer, Consumer, String)} instead.
      */
-    // TODO: mark Deprecated and provide the alternatives
+    @Deprecated
     public Mono<Token> getToken(String username, String password) {
         return fetchUserTokenWithEasemobRealm(this.context, UserTokenRequest.of(username, password));
     }
