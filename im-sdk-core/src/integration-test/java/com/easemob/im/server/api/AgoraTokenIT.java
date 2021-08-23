@@ -32,8 +32,8 @@ public class AgoraTokenIT {
     private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
     // this name must be yifan3 for now
     // TODO: dont hardcode names once easemobUserName -> agoraUserId mapping is ready
-    private static final String ALICE_USER_NAME = "yifan3";
-    private static final String BOB_USER_NAME = "ken-0";
+    private static final String ALICE_USER_NAME = "ken-0";
+    private static final String BOB_USER_NAME = "ken-1";
 
     protected EMService service;
 
