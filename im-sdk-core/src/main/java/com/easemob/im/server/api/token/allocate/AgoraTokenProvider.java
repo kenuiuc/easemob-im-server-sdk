@@ -55,12 +55,11 @@ public class AgoraTokenProvider implements TokenProvider {
                         () -> Duration.ofSeconds(10));
     }
 
-    public static Mono<Token> exchangeForEasemobToken(HttpClient httpClient, String baseUrl,
-            String agoraToken,
-            Codec codec, ErrorMapper errorMapper) {
+    private Mono<Token> exchangeForEasemobToken(HttpClient httpClient, String baseUrl,
+            String appId, String appCert, Codec codec, ErrorMapper errorMapper) {
         return httpClient.baseUrl(baseUrl)
-                .headers(headers -> headers
-                        .set("Authorization", String.format("Bearer %s", agoraToken)))
+                .headersWhen(headers -> buildAppToken(appId, appCert)
+                        .map(token -> headers.set("Authorization", String.format("Bearer %s", token))))
                 .post().uri("/token")
                 .send(Mono.create(sink -> sink
                         .success(codec.encode(ExchangeTokenRequest.getInstance()))))
@@ -75,30 +74,32 @@ public class AgoraTokenProvider implements TokenProvider {
     }
 
     private Mono<Token> fetchEasemobToken(String appId, String appCert) {
-        String agoraChatAppToken = buildAppToken(appId, appCert);
         return endpointRegistry.endpoints().map(this.loadBalancer::loadBalance)
                 .flatMap(endpoint ->
                         exchangeForEasemobToken(
                                 this.httpClient,
                                 String.format("%s/%s", endpoint.getUri(),
                                         this.properties.getAppkeySlashDelimited()),
-                                agoraChatAppToken, this.codec, this.errorMapper
+                                appId, appCert, this.codec, this.errorMapper
                         )
                 );
     }
 
-    private String buildAppToken(String appId, String appCert) {
+    private Mono<String> buildAppToken(String appId, String appCert) {
 
-        AccessToken2 accessToken = new AccessToken2(appId, appCert, EXPIRE_IN_SECONDS);
-        AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
-        serviceChat
-                .addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP, EXPIRE_IN_SECONDS);
-        accessToken.addService(serviceChat);
-        try {
-            return accessToken.build();
-        } catch (Exception e) {
-            log.error("building accessToken2 failed", e);
-            throw new EMInvalidStateException("building accessToken2 failed");
-        }
+        return Mono.fromCallable(() -> {
+
+            AccessToken2 accessToken = new AccessToken2(appId, appCert, EXPIRE_IN_SECONDS);
+            AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
+            serviceChat
+                    .addPrivilegeChat(AccessToken2.PrivilegeChat.PRIVILEGE_CHAT_APP, EXPIRE_IN_SECONDS);
+            accessToken.addService(serviceChat);
+            try {
+                return accessToken.build();
+            } catch (Exception e) {
+                log.error("building accessToken2 failed", e);
+                throw new EMInvalidStateException("building accessToken2 failed");
+            }
+        });
     }
 }
