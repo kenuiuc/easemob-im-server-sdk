@@ -23,7 +23,7 @@ public class AgoraTokenProvider implements TokenProvider {
             System.getenv("IM_TOKEN_EXPIRE_IN_SECONDS");
     // Both token and chat privilege will expire in an hour by default
     private static final int EXPIRE_IN_SECONDS = Strings.isNotBlank(EXPIRE_IN_SECONDS_STRING) ?
-            Integer.parseInt(EXPIRE_IN_SECONDS_STRING) : 3600;
+            Integer.parseInt(EXPIRE_IN_SECONDS_STRING) : 100;
 
     private final EMProperties properties;
 

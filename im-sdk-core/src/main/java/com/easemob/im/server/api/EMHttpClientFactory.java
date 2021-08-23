@@ -17,14 +17,7 @@ public class EMHttpClientFactory {
     private static final String HTTP_LOG_FORMAT = System.getenv("IM_HTTP_LOG_FORMAT");
 
     private static AdvancedByteBufFormat toFormat(String formatValue) {
-        if ("HEX_DUMP".equals(formatValue)) {
-            return AdvancedByteBufFormat.HEX_DUMP;
-        } else if ("TEXTUAL".equals(formatValue)) {
             return AdvancedByteBufFormat.TEXTUAL;
-        } else {
-            // by default use simple to hide http contents since they might include sensitive data
-            return AdvancedByteBufFormat.SIMPLE;
-        }
     }
 
     public static HttpClient create(EMProperties properties) {
