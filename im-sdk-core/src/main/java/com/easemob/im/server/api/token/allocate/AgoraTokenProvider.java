@@ -50,10 +50,11 @@ public class AgoraTokenProvider implements TokenProvider {
                         () -> Duration.ofSeconds(10));
     }
 
-    private Mono<Token> exchangeForEasemobToken(HttpClient httpClient, String baseUrl,
-            String appId, String appCert, Codec codec, ErrorMapper errorMapper, int expireInSeconds) {
+    // exchangeForEasemobToken(httpClient, baseUrl, agoraToken, codec, errorMapper)
+    public static Mono<Token> exchangeForEasemobToken(HttpClient httpClient, String baseUrl,
+            Mono<String> agoraToken, Codec codec, ErrorMapper errorMapper){
         return httpClient.baseUrl(baseUrl)
-                .headersWhen(headers -> buildAppToken(appId, appCert, expireInSeconds)
+                .headersWhen(headers -> agoraToken
                         .map(token -> headers.set("Authorization", String.format("Bearer %s", token))))
                 .post().uri("/token")
                 .send(Mono.create(sink -> sink
@@ -73,15 +74,13 @@ public class AgoraTokenProvider implements TokenProvider {
                 .flatMap(endpoint ->
                         exchangeForEasemobToken(
                                 this.httpClient,
-                                String.format("%s/%s", endpoint.getUri(),
-                                        this.properties.getAppkeySlashDelimited()),
-                                appId, appCert, this.codec, this.errorMapper, expireInSeconds
+                                String.format("%s/%s", endpoint.getUri(), this.properties.getAppkeySlashDelimited()),
+                                buildAppToken(appId, appCert, expireInSeconds), this.codec, this.errorMapper
                         )
                 );
     }
 
     private Mono<String> buildAppToken(String appId, String appCert, int expireInSeconds) {
-
         return Mono.fromCallable(() -> {
             AccessToken2 accessToken = new AccessToken2(appId, appCert, expireInSeconds);
             AccessToken2.Service serviceChat = new AccessToken2.ServiceChat();
