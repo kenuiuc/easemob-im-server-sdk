@@ -29,7 +29,7 @@ public class AgoraTokenIT {
     private static final String DUMMY_CHANNEL_NAME = "dummyChannelName";
     private static final String DUMMY_UID = "dummyUID";
 
-    private static final int USER_TOKEN_EXPIRE_IN_SECONDS = 60;
+    private static final int USER_TOKEN_EXPIRE_IN_SECONDS = 600;
     private static final int APP_TOKEN_EXPIRE_IN_SECONDS = 10;
 
     private static final Logger log = LoggerFactory.getLogger(AgoraTokenProvider.class);
@@ -59,10 +59,10 @@ public class AgoraTokenIT {
     // The app token will renew upon expiration
     @Test
     public void appTokenTest() throws InterruptedException {
-        for (int i = 0; i < 3; i ++) {
+        for (int i = 0; i < 20; i ++) {
             assertDoesNotThrow(() -> this.service.user()
                     .listUsers(1, null).block(Utilities.IT_TIMEOUT));
-            Thread.sleep(APP_TOKEN_EXPIRE_IN_SECONDS * 1000);
+            Thread.sleep(1000);
         }
     }
 

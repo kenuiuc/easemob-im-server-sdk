@@ -8,13 +8,13 @@ import com.easemob.im.server.api.loadbalance.LoadBalancer;
 import com.easemob.im.server.api.token.Token;
 import com.easemob.im.server.api.token.agora.AccessToken2;
 import com.easemob.im.server.exception.EMInvalidStateException;
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
+import java.time.Instant;
 
 public class AgoraTokenProvider implements TokenProvider {
 
@@ -44,8 +44,7 @@ public class AgoraTokenProvider implements TokenProvider {
         this.errorMapper = errorMapper;
         this.appToken = fetchEasemobToken(properties.getAppId(), properties.getAppCert(),
                 properties.getAgoraTokenExpireInSeconds())
-                .cache(token -> Duration.ofSeconds(properties.getAgoraTokenExpireInSeconds())
-                                .dividedBy(2),
+                .cache(token -> Duration.between(Instant.now(), token.getExpireAt()).dividedBy(2),
                         error -> Duration.ofSeconds(10),
                         () -> Duration.ofSeconds(10));
     }
